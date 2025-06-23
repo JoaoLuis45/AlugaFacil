@@ -1,6 +1,4 @@
 import 'package:aluga_facil/app/pages/createAccount/controllers/signup_page_controller.dart';
-import 'package:aluga_facil/app/pages/login/bindings/login_page_binding.dart';
-import 'package:aluga_facil/app/pages/login/views/login_page_view.dart';
 import 'package:aluga_facil/app/shared/input_form_field.dart';
 import 'package:aluga_facil/app/themes/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +142,7 @@ class SignUpPage extends GetView<SignupPageController> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  Get.offAll(() => LoginPage(),binding: BindingLoginPage());
+                                  Get.offAllNamed('/login');
                                 },
                                 child: Text(
                                   'Entrar',
