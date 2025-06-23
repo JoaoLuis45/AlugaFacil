@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394831104723",
+    "project_id": "alugafacil-2b5e8",
+    "storage_bucket": "alugafacil-2b5e8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394831104723:android:f913aa5dcf692d3641a226",
+        "android_client_info": {
+          "package_name": "com.reiffer.alugafacil.aluga_facil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6tjikBjmsfnX3g1-VJuTu10UR81OArYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
