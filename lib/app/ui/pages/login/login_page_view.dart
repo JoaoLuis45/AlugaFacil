@@ -157,6 +157,7 @@ class LoginPage extends GetView<LoginPageController> {
                               TextButton(
                                 onPressed: () {
                                   Get.offAllNamed('/signup');
+                                  Get.offAllNamed('/signup');
                                 },
                                 child: Text(
                                   'Criar conta',

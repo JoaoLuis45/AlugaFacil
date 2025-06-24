@@ -158,6 +158,7 @@ class SignUpPage extends GetView<SignupPageController> {
                               TextButton(
                                 onPressed: () {
                                   Get.offAllNamed('/login');
+                                  Get.offAllNamed('/login');
                                 },
                                 child: Text(
                                   'Entrar',

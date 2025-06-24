@@ -41,6 +41,7 @@ class WelcomePage extends GetView<WelcomePageController> {
                 child: TextButton(
                   onPressed: () {
                     Get.offAllNamed('/login');
+                    Get.offAllNamed('/login');
                   },
                   child: Text(
                     'Entrar',
@@ -61,6 +62,7 @@ class WelcomePage extends GetView<WelcomePageController> {
                 ),
                 child: TextButton(
                   onPressed: () {
+                    Get.offAllNamed('/signup');
                     Get.offAllNamed('/signup');
                   },
                   child: Text(
