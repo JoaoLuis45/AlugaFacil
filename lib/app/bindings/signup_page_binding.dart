@@ -1,4 +1,4 @@
-import 'package:aluga_facil/app/pages/createAccount/controllers/signup_page_controller.dart';
+import 'package:aluga_facil/app/controllers/signup_page_controller.dart';
 import 'package:get/instance_manager.dart';
 
 class BindingSignUpPage implements Bindings {

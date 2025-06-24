@@ -1,9 +1,5 @@
-import 'package:aluga_facil/app/pages/createAccount/bindings/signup_page_binding.dart';
-import 'package:aluga_facil/app/pages/createAccount/views/signup_page_view.dart';
-import 'package:aluga_facil/app/pages/login/bindings/login_page_binding.dart';
-import 'package:aluga_facil/app/pages/login/views/login_page_view.dart';
-import 'package:aluga_facil/app/pages/welcome/controllers/welcome_page_controller.dart';
-import 'package:aluga_facil/app/themes/app_colors.dart';
+import 'package:aluga_facil/app/controllers/welcome_page_controller.dart';
+import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:get/route_manager.dart';
@@ -44,7 +40,7 @@ class WelcomePage extends GetView<WelcomePageController> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Get.offAll(() => LoginPage(),binding: BindingLoginPage());
+                    Get.offAllNamed('/login');
                   },
                   child: Text(
                     'Entrar',
@@ -65,7 +61,7 @@ class WelcomePage extends GetView<WelcomePageController> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Get.offAll(() => SignUpPage(),binding: BindingSignUpPage());
+                    Get.offAllNamed('/signup');
                   },
                   child: Text(
                     'Criar Conta',

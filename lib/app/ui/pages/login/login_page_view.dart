@@ -1,8 +1,7 @@
-import 'package:aluga_facil/app/pages/createAccount/bindings/signup_page_binding.dart';
-import 'package:aluga_facil/app/pages/createAccount/views/signup_page_view.dart';
-import 'package:aluga_facil/app/pages/login/controllers/login_page_controller.dart';
-import 'package:aluga_facil/app/shared/input_form_field.dart';
-import 'package:aluga_facil/app/themes/app_colors.dart';
+import 'package:aluga_facil/app/controllers/login_page_controller.dart';
+import 'package:aluga_facil/app/ui/widgets/controllers/input_form_field_controller.dart';
+import 'package:aluga_facil/app/ui/widgets/input_form_field.dart';
+import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,19 +74,22 @@ class LoginPage extends GetView<LoginPageController> {
                       child: Column(
                         children: [
                           Spacer(flex: 10),
-                          inputText(
-                            'username',
-                            'Email',
-                            Icons.email_outlined,
+                          InputTextFormField(
+                            keyy: 'email',
+                            iconImage: Icons.email_outlined,
+                            isPassword: false,
                             textController: controller.inputEmail,
+                            title: 'Email',
+                            controller: InputFormFieldController(),
                           ),
                           Spacer(flex: 2),
-                          inputText(
-                            'pass',
-                            'Senha',
-                            Icons.lock_outline,
+                          InputTextFormField(
+                            keyy: 'pass',
+                            iconImage: Icons.lock_outline,
                             isPassword: true,
                             textController: controller.inputPassword,
+                            title: 'Senha',
+                            controller: InputFormFieldController(),
                           ),
                           Spacer(flex: 2),
                           Row(
@@ -115,17 +117,25 @@ class LoginPage extends GetView<LoginPageController> {
                               ),
                               borderRadius: BorderRadius.circular(25),
                             ),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Entrar',
-                                style: TextStyle(
-                                  color: goldColorThree,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                ),
-                              ),
-                            ),
+                            child: Obx(() {
+                              return TextButton(
+                                onPressed: () {
+                                  controller.onSubmit(context);
+                                },
+                                child: controller.isLoading
+                                    ? CircularProgressIndicator(
+                                        color: goldColorOne,
+                                      )
+                                    : Text(
+                                        'Entrar',
+                                        style: TextStyle(
+                                          color: goldColorThree,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                              );
+                            }),
                           ),
                           Spacer(flex: 20),
                           Row(
@@ -146,7 +156,7 @@ class LoginPage extends GetView<LoginPageController> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  Get.offAll(() => SignUpPage(),binding: BindingSignUpPage());
+                                  Get.offAllNamed('/signup');
                                 },
                                 child: Text(
                                   'Criar conta',
