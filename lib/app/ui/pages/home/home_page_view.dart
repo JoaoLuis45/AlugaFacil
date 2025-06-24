@@ -1,5 +1,4 @@
 import 'package:aluga_facil/app/controllers/home_page_controller.dart';
-import 'package:aluga_facil/app/services/flutter_fire_auth.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -28,7 +27,8 @@ class HomePage extends GetView<HomePageController> {
               decoration: BoxDecoration(color: brownColorTwo),
               currentAccountPicture: CircleAvatar(
                 child: Obx(() {
-                  return controller.user.value.avatar == null
+                  return controller.userController.value.loggedUser.avatar ==
+                          null
                       ? InkWell(
                           onTap: () {
                             controller.switchProfilePhoto(context);
@@ -38,14 +38,18 @@ class HomePage extends GetView<HomePageController> {
                       : CircleAvatar(
                           radius: 33,
                           backgroundImage: NetworkImage(
-                            controller.user.value.avatar!,
+                            controller.userController.value.loggedUser.avatar!,
                           ),
                           child: Text(''),
                         );
                 }),
               ),
-              accountName: Text(controller.user.value.name!),
-              accountEmail: Text(controller.user.value.email!),
+              accountName: Text(
+                controller.userController.value.loggedUser.name!,
+              ),
+              accountEmail: Text(
+                controller.userController.value.loggedUser.email!,
+              ),
             ),
             Column(
               children: [
@@ -55,7 +59,10 @@ class HomePage extends GetView<HomePageController> {
                     'Sair',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  onTap: () => FlutterFireAuth(context).signOut(),
+                  onTap: () {
+                    controller.repository.logout();
+                    controller.userController.value.logout();
+                  },
                 ),
               ],
             ),

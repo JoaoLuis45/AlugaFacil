@@ -1,6 +1,8 @@
 import 'dart:io';
 
-import 'package:aluga_facil/app/models/user_data_model.dart';
+import 'package:aluga_facil/app/controllers/user_controller.dart';
+import 'package:aluga_facil/app/data/models/user_data_model.dart';
+import 'package:aluga_facil/app/data/repositories/user_Repository.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,14 +11,18 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class HomePageController extends GetxController {
-  final Rx<UserDataModel> user = UserDataModel().obs;
-  late UserCredential credential;
+  final UserRepository _repository;
+  UserRepository get repository => _repository;
+
+  final Rx<UserController> userController = UserController().obs;
+
+  HomePageController(this._repository);
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    user.value = Get.arguments['user'];
-    credential = Get.arguments['credential'];
+    final user =  _repository.getUserData();
+    userController.value.loggedUser =  user;
   }
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -40,14 +46,15 @@ class HomePageController extends GetxController {
 
         await fileRef.putFile(avatar);
 
+        final currentUser = FirebaseAuth.instance.currentUser;
+
         final fileUrl = await fileRef.getDownloadURL();
+        await currentUser?.updatePhotoURL(fileUrl);
 
-        await credential.user?.updatePhotoURL(fileUrl);
-
-        user.value = UserDataModel(
-          name: user.value.name,
-          email: user.value.email,
-          avatar: fileUrl
+        userController.value.loggedUser = UserDataModel(
+          name: userController.value.loggedUser.name,
+          email: userController.value.loggedUser.email,
+          avatar: fileUrl,
         );
       }
     } catch (e) {

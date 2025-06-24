@@ -1,10 +1,15 @@
-import 'package:aluga_facil/app/services/flutter_fire_auth.dart';
+import 'package:aluga_facil/app/data/repositories/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginPageController extends GetxController {
   final inputEmail = TextEditingController();
   final inputPassword = TextEditingController();
+
+  final UserRepository _repository;
+
+  LoginPageController(this._repository);
 
   final _isLoading = false.obs;
   get isLoading => _isLoading.value;
@@ -28,22 +33,24 @@ class LoginPageController extends GetxController {
 
       _isLoading.value = true;
 
-      final result = await FlutterFireAuth(
-        context,
-      ).signInWithEmailAndPassword(email, password);
-
-      final user = result['user'];
-      final credential = result['credential'];
+      final user = await _repository.login(email, password);
 
       _isLoading.value = false;
 
       if (user != null) {
-        Get.offAllNamed(
-          'home',
-          arguments: {'user': user, 'credential': credential},
-        );
+        Get.offAllNamed('/home',);
       }
+    }on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? 'Ocorreu um erro desconhecido!')),
+      );
     } catch (e) {
+      ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally{
       _isLoading.value = false;
     }
   }

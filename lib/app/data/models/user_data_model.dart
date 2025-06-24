@@ -5,4 +5,5 @@ class UserDataModel {
   final String? name;
 
   UserDataModel({this.avatar, this.email, this.pass, this.name});
+  
 }
