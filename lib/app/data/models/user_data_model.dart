@@ -3,7 +3,7 @@ class UserDataModel {
   final String? email;
   final String? pass;
   final String? name;
+  final String? id;
 
-  UserDataModel({this.avatar, this.email, this.pass, this.name});
-  
+  UserDataModel({this.id,this.avatar, this.email, this.pass, this.name});
 }

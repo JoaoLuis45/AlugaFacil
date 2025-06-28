@@ -3,8 +3,7 @@ import 'package:aluga_facil/app/data/services/flutter_fire_auth.dart';
 
 class UserProvider extends FlutterFireAuth {
   Future<UserDataModel?> login(String email, String password) async {
-    final user = await signInWithEmailAndPassword(email, password);
-    return user;
+    return await signInWithEmailAndPassword(email, password);
   }
 
   Future<UserDataModel?> signup(
@@ -12,13 +11,11 @@ class UserProvider extends FlutterFireAuth {
     String password,
     String name,
   ) async {
-    final user = await createUserWithEmailAndPassword(name, email, password);
-    return user;
+    return await createUserWithEmailAndPassword(name, email, password);
   }
 
   getUserData()  {
-    final user = getLoggedUser();
-    return user;
+    return getLoggedUser();
   }
 
   signOutUser() {

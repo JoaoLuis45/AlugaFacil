@@ -21,7 +21,7 @@ abstract class FlutterFireAuth {
 
       await credential.user?.updateDisplayName(name);
 
-      return UserDataModel(email: email, name: name);
+      return UserDataModel(email: email, name: name,id: credential.user?.uid);
     
   }
 
@@ -36,12 +36,12 @@ abstract class FlutterFireAuth {
         name: credential.user?.displayName,
         email: credential.user?.email,
         avatar: credential.user?.photoURL,
+        id: credential.user?.uid
       );
   }
 
   UserDataModel? getLoggedUser() {
     final user = _auth.currentUser;
-
     if (user == null) {
       return null;
     }
@@ -50,6 +50,7 @@ abstract class FlutterFireAuth {
       avatar: user.photoURL,
       name: user.displayName,
       email: user.email,
+      id: user.uid
     );
   }
 
