@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/models/user_data_model.dart';
 import 'package:aluga_facil/app/data/repositories/user_Repository.dart';
+import 'package:aluga_facil/app/ui/pages/tabs/tabs_list.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,15 +15,18 @@ class HomePageController extends GetxController {
   final UserRepository _repository;
   UserRepository get repository => _repository;
 
-  final Rx<UserController> userController = UserController().obs;
+  final PageController pageController = PageController();
+  final indexPage = dashboardTab.obs;
+
+  final userController = Get.find<UserController>();
 
   HomePageController(this._repository);
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    final user =  _repository.getUserData();
-    userController.value.loggedUser =  user;
+    final user = _repository.getUserData();
+    userController.loggedUser = user;
   }
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -51,9 +55,9 @@ class HomePageController extends GetxController {
         final fileUrl = await fileRef.getDownloadURL();
         await currentUser?.updatePhotoURL(fileUrl);
 
-        userController.value.loggedUser = UserDataModel(
-          name: userController.value.loggedUser.name,
-          email: userController.value.loggedUser.email,
+        userController.loggedUser = UserDataModel(
+          name: userController.loggedUser.name,
+          email: userController.loggedUser.email,
           avatar: fileUrl,
         );
       }
@@ -64,4 +68,6 @@ class HomePageController extends GetxController {
       ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
+
+  
 }

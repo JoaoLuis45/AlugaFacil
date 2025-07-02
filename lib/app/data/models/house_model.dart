@@ -1,13 +1,11 @@
-import 'package:aluga_facil/app/data/models/inquilino_model.dart';
-
 class HouseModel {
   String? logradouro;
-  int? numeroCasa;
+  String? numeroCasa;
   String? fotoCasa;
   double? valorAluguel;
   int? id;
   DateTime? dataAluguel;
-  InquilinoModel? inquilino;
+  String? inquilino;
 
   HouseModel({
     this.logradouro,
@@ -27,9 +25,7 @@ class HouseModel {
       valorAluguel: json['valorAluguel'],
       id: json['id'],
       dataAluguel: json['dataAluguel'],
-      inquilino: json['inquilino'] != null
-        ? InquilinoModel.fromJson(json['inquilino'])
-        : null,
+      inquilino: json['inquilino'], 
     );
     }
 
@@ -41,7 +37,7 @@ class HouseModel {
       'valorAluguel': valorAluguel,
       'id': id,
       'dataAluguel': dataAluguel?.toIso8601String(),
-      'inquilino': inquilino?.toJson(),
+      'inquilino': inquilino,
     };
     }
 }

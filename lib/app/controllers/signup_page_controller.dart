@@ -1,3 +1,4 @@
+import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class SignupPageController extends GetxController {
 
       _isLoading.value = false;
 
+      Get.put<UserController>(UserController());
       if (user != null) {
         Get.offAllNamed('/home');
       }

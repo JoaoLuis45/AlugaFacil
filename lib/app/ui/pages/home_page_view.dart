@@ -1,11 +1,22 @@
 import 'package:aluga_facil/app/controllers/home_page_controller.dart';
+import 'package:aluga_facil/app/ui/pages/tabs/dashboard_page.dart';
+import 'package:aluga_facil/app/ui/pages/tabs/financeiro_page.dart';
+import 'package:aluga_facil/app/ui/pages/tabs/house_page.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/ui/widgets/fade_indexed_stack.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class HomePage extends GetView<HomePageController> {
-  const HomePage({super.key});
+  List<Widget> pages = [
+    const HousePage(),
+    const DashboardPage(),
+    const FinanceiroPage(),
+  ];
+  HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +38,7 @@ class HomePage extends GetView<HomePageController> {
               decoration: BoxDecoration(color: brownColorTwo),
               currentAccountPicture: CircleAvatar(
                 child: Obx(() {
-                  return controller.userController.value.loggedUser.avatar ==
+                  return controller.userController.loggedUser.avatar ==
                           null
                       ? InkWell(
                           onTap: () {
@@ -38,17 +49,17 @@ class HomePage extends GetView<HomePageController> {
                       : CircleAvatar(
                           radius: 33,
                           backgroundImage: NetworkImage(
-                            controller.userController.value.loggedUser.avatar!,
+                            controller.userController.loggedUser.avatar!,
                           ),
                           child: Text(''),
                         );
                 }),
               ),
               accountName: Text(
-                controller.userController.value.loggedUser.name!,
+                controller.userController.loggedUser.name!,
               ),
               accountEmail: Text(
-                controller.userController.value.loggedUser.email!,
+                controller.userController.loggedUser.email!,
               ),
             ),
             Column(
@@ -61,13 +72,44 @@ class HomePage extends GetView<HomePageController> {
                   ),
                   onTap: () {
                     controller.repository.logout();
-                    controller.userController.value.logout();
+                    controller.userController.logout();
                   },
                 ),
               ],
             ),
           ],
         ),
+      ),
+      body: Obx(() => getBody()),
+      bottomNavigationBar: getFooter(),
+    );
+  }
+
+  Widget getBody() {
+    return FadeIndexedStack(index: controller.indexPage.value, children: pages);
+  }
+
+  Widget getFooter() {
+    List<IconData> iconIndex = [
+      Icons.house_outlined,
+      Icons.dashboard_customize_outlined,
+      Icons.attach_money_rounded,
+    ];
+
+    return Obx(
+      () => AnimatedBottomNavigationBar(
+        activeColor: goldColorThree,
+        splashColor: goldColorOne,
+        backgroundColor: brownColorTwo,
+        inactiveColor: Colors.white60,
+        icons: iconIndex,
+        gapLocation: GapLocation.none,
+        activeIndex: controller.indexPage.value,
+        notchSmoothness: NotchSmoothness.softEdge,
+        leftCornerRadius: 16,
+        rightCornerRadius: 16,
+        iconSize: 25,
+        onTap: (index) => controller.indexPage.value = index,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class LoginPageController extends GetxController {
         context,
       ).showSnackBar(SnackBar(content: Text('O campo senha é obrigatório!')));
       return;
-    } 
+    }
 
     try {
       final email = inputEmail.text;
@@ -37,10 +38,11 @@ class LoginPageController extends GetxController {
 
       _isLoading.value = false;
 
+      Get.put<UserController>(UserController());
       if (user != null) {
-        Get.offAllNamed('/home',);
+        Get.offAllNamed('/home');
       }
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message ?? 'Ocorreu um erro desconhecido!')),
@@ -50,7 +52,7 @@ class LoginPageController extends GetxController {
         // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text(e.toString())));
-    } finally{
+    } finally {
       _isLoading.value = false;
     }
   }
