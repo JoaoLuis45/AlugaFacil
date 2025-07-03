@@ -25,8 +25,8 @@ class InquilinoProvider {
 
   Future<void> save(InquilinoModel inquilino) async {
     final user = Get.find<UserController>();
-    final houseController = Get.find<HouseController>();
-    houseController.lista.add(inquilino);
+    final inquilinoController = Get.find<InquilinoPageController>();
+    inquilinoController.lista.add(inquilino);
     await db
         .collection('usuarios/${user.loggedUser.id}/inquilinos')
         .doc(inquilino.cpf.toString())
@@ -37,8 +37,8 @@ class InquilinoProvider {
           'email': inquilino.email,
           'nome': inquilino.nome,
           'telefone': inquilino.telefone,
-          'valorAluguel': inquilino.casaNumero,
-          'dataAluguel': inquilino.casaId,
+          'casaNumero': inquilino.casaNumero,
+          'casaId': inquilino.casaId,
         });
   }
 

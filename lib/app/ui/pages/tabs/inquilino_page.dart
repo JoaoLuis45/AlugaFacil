@@ -20,8 +20,8 @@ class InquilinoPage extends GetView<InquilinoPageController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 AnimSearchBar(
-                  width: Get.width / 100 * 92,
-                  helpText: 'Pesquisar Imóvel...',
+                  width: Get.width * 0.9,
+                  helpText: 'Pesquisar Inquilino...',
                   boxShadow: true,
                   textFieldColor: goldColorThree,
                   searchIconColor: goldColorThree,
@@ -46,13 +46,9 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                 elevation: 8,
                 child: IconButton(
                   onPressed: () {
-                    Get.toNamed('/createHouse');
+                    Get.toNamed('/createInquilino');
                   },
-                  icon: Icon(
-                    Icons.add_home_rounded,
-                    color: goldColorThree,
-                    size: 32,
-                  ),
+                  icon: Icon(Icons.person_add, color: goldColorThree, size: 32),
                 ),
               ),
             ),
@@ -88,7 +84,8 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                       onRefresh: () => controller.inquilinoRepository.read(),
                       child: ListView.separated(
                         itemBuilder: (context, index) {
-                          final InquilinoModel inquilino = controller.lista[index];
+                          final InquilinoModel inquilino =
+                              controller.lista[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Card(
@@ -99,28 +96,29 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                                 leading: Hero(
                                   tag: inquilino,
                                   child: Icon(
-                                          Icons.person,
-                                          color: brownColorTwo,
-                                          size: 64,
-                                        ),
+                                    Icons.person,
+                                    color: brownColorTwo,
+                                    size: 64,
+                                  ),
                                 ),
-                                title: Text(
-                                  inquilino.nome ?? '',
-                                ),
-                                subtitle: Text(
-                                  inquilino.cpf ?? '',
-                                ),
+                                title: Text(inquilino.nome ?? ''),
+                                subtitle: Text(inquilino.cpf ?? ''),
                                 trailing: IconButton(
                                   icon: const Icon(
                                     Icons.delete,
                                     color: brownColorTwo,
                                   ),
                                   onPressed: () {
-                                    controller.inquilinoRepository.remove(inquilino);
+                                    controller.inquilinoRepository.remove(
+                                      inquilino,
+                                    );
                                   },
                                 ),
                                 onTap: () {
-                                  Get.toNamed('/detailsInquilino', arguments: inquilino);
+                                  Get.toNamed(
+                                    '/detailsInquilino',
+                                    arguments: inquilino,
+                                  );
                                 },
                               ),
                             ),

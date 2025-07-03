@@ -19,7 +19,7 @@ class HousePage extends GetView<HouseController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 AnimSearchBar(
-                  width: Get.width / 100 * 92,
+                  width: Get.width * 0.9,
                   helpText: 'Pesquisar Imóvel...',
                   boxShadow: true,
                   textFieldColor: goldColorThree,

@@ -1,6 +1,7 @@
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/ui/widgets/controllers/input_form_field_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/state_manager.dart';
 
 // ignore: must_be_immutable
@@ -10,9 +11,10 @@ class InputTextFormField extends StatelessWidget {
   final String keyy;
   final String title;
   final IconData iconImage;
+  List<TextInputFormatter>? maskformatter;
   final InputFormFieldController controller;
 
-  const InputTextFormField({
+  InputTextFormField({
     super.key,
     required this.textController,
     required this.isPassword,
@@ -20,6 +22,7 @@ class InputTextFormField extends StatelessWidget {
     required this.title,
     required this.iconImage,
     required this.controller,
+    this.maskformatter,
   });
 
   @override
@@ -28,6 +31,7 @@ class InputTextFormField extends StatelessWidget {
       return TextFormField(
         key: Key(keyy),
         controller: textController,
+        inputFormatters: maskformatter,
         style: const TextStyle(color: goldColorThree, fontFamily: 'Raleway'),
         autocorrect: false,
         keyboardType: TextInputType.emailAddress,
