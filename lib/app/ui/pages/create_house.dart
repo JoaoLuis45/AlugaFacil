@@ -63,11 +63,41 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                           colors: [goldColorOne, brownColorTwo],
                         ),
                       ),
-                      child: Icon(
-                        Icons.house,
-                        size: 100,
-                        color: goldColorThree,
-                      ),
+                      child: Obx(() {
+                        return controller.isLoadingfotoCasa.value
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(
+                                    color: goldColorThree,
+                                  ),
+                                ],
+                              )
+                            : controller.fotoCasa.value.isEmpty
+                            ? IconButton(
+                                onPressed: () {
+                                  controller.switchHousePhoto();
+                                },
+                                icon: Icon(
+                                  Icons.add_a_photo_outlined,
+                                  size: 50,
+                                  color: goldColorThree,
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  controller.switchHousePhoto();
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: Image.network(
+                                    controller.fotoCasa.value,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                      }),
                     ),
                     Spacer(flex: 3),
                     Text(
@@ -87,7 +117,7 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                       title: 'Número da Casa',
                       controller: InputFormFieldController(),
                     ),
-                    Spacer(flex: 1),
+                    Spacer(),
                     InputTextFormField(
                       keyy: 'logradouro',
                       iconImage: Icons.location_on_sharp,
@@ -96,7 +126,25 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                       title: 'Logradouro',
                       controller: InputFormFieldController(),
                     ),
-                    Spacer(flex: 1),
+                    Spacer(),
+                    InputTextFormField(
+                      keyy: 'bairro',
+                      iconImage: Icons.share_location,
+                      isPassword: false,
+                      textController: controller.inputBairro,
+                      title: 'Bairro',
+                      controller: InputFormFieldController(),
+                    ),
+                    Spacer(),
+                    InputTextFormField(
+                      keyy: 'cidade',
+                      iconImage: Icons.location_city_outlined,
+                      isPassword: false,
+                      textController: controller.inputCidade,
+                      title: 'Cidade',
+                      controller: InputFormFieldController(),
+                    ),
+                    Spacer(),
                     InputTextFormField(
                       keyy: 'valorAluguel',
                       iconImage: Icons.attach_money_sharp,
@@ -132,7 +180,7 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                         );
                       }),
                     ),
-                    Spacer(flex: 20),
+                    Spacer(flex: 18),
                   ],
                 ),
               ),

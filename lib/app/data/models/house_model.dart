@@ -1,25 +1,33 @@
+import 'package:uuid/uuid.dart';
+
 class HouseModel {
   String? logradouro;
+  String? bairro;
+  String? cidade;
   String? numeroCasa;
   String? fotoCasa;
   double? valorAluguel;
-  int? id;
+  String? id;
   DateTime? dataAluguel;
   String? inquilino;
 
   HouseModel({
     this.logradouro,
+    this.bairro,
+    this.cidade,
     this.numeroCasa,
     this.fotoCasa,
     this.valorAluguel,
-    this.id,
+    String? id,
     this.dataAluguel,
     this.inquilino,
-    });
+    }) : id = id ?? const Uuid().v4();
 
     factory HouseModel.fromJson(Map<String, dynamic> json) {
     return HouseModel(
       logradouro: json['logradouro'],
+      bairro: json['bairro'],
+      cidade: json['cidade'],
       numeroCasa: json['numeroCasa'],
       fotoCasa: json['fotoCasa'],
       valorAluguel: json['valorAluguel'],
@@ -32,6 +40,8 @@ class HouseModel {
     Map<String, dynamic> toJson() {
     return {
       'logradouro': logradouro,
+      'bairro': bairro,
+      'cidade': cidade,
       'numeroCasa': numeroCasa,
       'fotoCasa': fotoCasa,
       'valorAluguel': valorAluguel,

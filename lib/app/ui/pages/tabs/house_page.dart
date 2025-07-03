@@ -36,6 +36,26 @@ class HousePage extends GetView<HouseController> {
               ],
             ),
           ),
+          SizedBox(
+            width: Get.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Card(
+                color: brownColorOne,
+                elevation: 8,
+                child: IconButton(
+                  onPressed: () {
+                    Get.toNamed('/createHouse');
+                  },
+                  icon: Icon(
+                    Icons.add_home_rounded,
+                    color: goldColorThree,
+                    size: 32,
+                  ),
+                ),
+              ),
+            ),
+          ),
           SizedBox(height: 10),
           Obx(() {
             return controller.isLoading.value
@@ -66,28 +86,45 @@ class HousePage extends GetView<HouseController> {
                     child: ListView.separated(
                       itemBuilder: (context, index) {
                         final casa = controller.lista[index];
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              casa.fotoCasa ??
-                                  'https://via.placeholder.com/150',
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Card(
+                            color: goldColorThree,
+                            elevation: 8,
+
+                            child: ListTile(
+                              leading: casa.fotoCasa != null
+                                  ? CircleAvatar(
+                                      radius: 32,
+                                      backgroundImage: NetworkImage(
+                                        casa.fotoCasa,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.house,
+                                      color: brownColorTwo,
+                                      size: 64,
+                                    ),
+                              title: Text(
+                                '${casa.numeroCasa} - ${casa.logradouro}',
+                              ),
+                              subtitle: Text(
+                                'R\$ ${casa.valorAluguel.toStringAsFixed(2)}',
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.person_add_alt_1,
+                                  color: brownColorTwo,
+                                ),
+                                onPressed: () {
+                                  controller.houseRepository.remove(casa);
+                                },
+                              ),
+                              onTap: () {
+                                Get.toNamed('/houseDetails', arguments: casa);
+                              },
                             ),
                           ),
-                          title: Text(
-                            '${casa.numeroCasa} - ${casa.logradouro}',
-                          ),
-                          subtitle: Text(
-                            'R\$ ${casa.valorAluguel.toStringAsFixed(2)}',
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              controller.houseRepository.remove(casa);
-                            },
-                          ),
-                          onTap: () {
-                            Get.toNamed('/houseDetails', arguments: casa);
-                          },
                         );
                       },
                       separatorBuilder: (context, index) =>
@@ -97,14 +134,6 @@ class HousePage extends GetView<HouseController> {
                   );
           }),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed('/createHouse');
-        },
-        backgroundColor: brownColorTwo,
-
-        child: const Icon(Icons.add, color: goldColorOne),
       ),
     );
   }
