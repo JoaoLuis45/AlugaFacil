@@ -12,10 +12,10 @@ import 'package:get/instance_manager.dart';
 class HomePageBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<HomePageController>(HomePageController(UserRepository(UserProvider())));
     Get.put<UserController>(UserController());
     Get.put<HouseController>(HouseController(HouseRepository(HouseProvider())));
     Get.put<FinanceiroPageController>(FinanceiroPageController());
     Get.put<DashboardPageController>(DashboardPageController());
+    Get.put<HomePageController>(HomePageController(UserRepository(UserProvider())));
   }
 }

@@ -1,6 +1,4 @@
-import 'package:aluga_facil/app/controllers/home_page_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class FadeIndexedStack extends StatefulWidget {
   final int? index;
@@ -45,7 +43,7 @@ class _FadeIndexedStackState extends State<FadeIndexedStack> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    final homeController = Get.find<HomePageController>();
+    // final homeController = Get.find<HomePageController>();
     // homeController.refreshReports();
     return FadeTransition(
       opacity: _controller,

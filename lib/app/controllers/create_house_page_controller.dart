@@ -64,7 +64,7 @@ class CreateHousePageController extends GetxController {
     showMessageBar('Sucesso!', 'Novo imóvel cadastrado com sucesso!');
     isLoading = false;
 
-    houseRepository.readCasas();
+    houseRepository.read();
     Get.toNamed('/home');
   }
 

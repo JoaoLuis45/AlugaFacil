@@ -65,7 +65,7 @@ class HouseProvider {
         });
   }
 
-  Future<void> readCasas() async {
+  Future<void> read() async {
     try {
       final user = Get.find<UserController>();
       final houseController = Get.find<HouseController>();

@@ -14,7 +14,7 @@ class HouseRepository {
     return houseProvider.remove(casa);
   }
 
-  Future<void> readCasas() {
-    return houseProvider.readCasas();
+  Future<void> read() {
+    return houseProvider.read();
   }
 }

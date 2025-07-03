@@ -1,15 +1,16 @@
-import 'package:aluga_facil/app/controllers/house_controller.dart';
+import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
+import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HousePage extends GetView<HouseController> {
-  const HousePage({super.key});
+class InquilinoPage extends GetView<InquilinoPageController> {
+  const InquilinoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    controller.houseRepository.read();
+    controller.inquilinoRepository.read();
     return Scaffold(
       body: Column(
         children: [
@@ -67,12 +68,12 @@ class HousePage extends GetView<HouseController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.house_outlined,
+                          Icons.person_outline,
                           size: 100,
                           color: brownColorTwo,
                         ),
                         Text(
-                          'Nenhuma casa cadastrada',
+                          'Nenhum inquilino cadastrado',
                           style: TextStyle(
                             color: brownColorTwo,
                             fontSize: 20,
@@ -84,10 +85,10 @@ class HousePage extends GetView<HouseController> {
                   )
                 : Expanded(
                     child: RefreshIndicator(
-                      onRefresh: () => controller.houseRepository.read(),
+                      onRefresh: () => controller.inquilinoRepository.read(),
                       child: ListView.separated(
                         itemBuilder: (context, index) {
-                          final casa = controller.lista[index];
+                          final InquilinoModel inquilino = controller.lista[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Card(
@@ -96,25 +97,18 @@ class HousePage extends GetView<HouseController> {
 
                               child: ListTile(
                                 leading: Hero(
-                                  tag: casa,
-                                  child: casa.fotoCasa != null
-                                      ? CircleAvatar(
-                                          radius: 32,
-                                          backgroundImage: NetworkImage(
-                                            casa.fotoCasa,
-                                          ),
-                                        )
-                                      : Icon(
-                                          Icons.house,
+                                  tag: inquilino,
+                                  child: Icon(
+                                          Icons.person,
                                           color: brownColorTwo,
                                           size: 64,
                                         ),
                                 ),
                                 title: Text(
-                                  '${casa.numeroCasa} - ${casa.logradouro}',
+                                  inquilino.nome ?? '',
                                 ),
                                 subtitle: Text(
-                                  'R\$ ${casa.valorAluguel.toStringAsFixed(2)}',
+                                  inquilino.cpf ?? '',
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(
@@ -122,11 +116,11 @@ class HousePage extends GetView<HouseController> {
                                     color: brownColorTwo,
                                   ),
                                   onPressed: () {
-                                    controller.houseRepository.remove(casa);
+                                    controller.inquilinoRepository.remove(inquilino);
                                   },
                                 ),
                                 onTap: () {
-                                  Get.toNamed('/detailsHouse', arguments: casa);
+                                  Get.toNamed('/detailsInquilino', arguments: inquilino);
                                 },
                               ),
                             ),
