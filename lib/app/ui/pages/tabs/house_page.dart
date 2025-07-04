@@ -14,6 +14,20 @@ class HousePage extends GetView<HouseController> {
       body: Column(
         children: [
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Meus imóveis',
+                style: TextStyle(
+                  color: brownColorTwo,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Padding(
             padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -29,8 +43,8 @@ class HousePage extends GetView<HouseController> {
                   textController: controller.searchController,
                   suffixIcon: const Icon(Icons.close, color: goldColorThree),
                   onSuffixTap: () {},
-                  onSubmitted: (a) {
-                    // print('aaaaaaaaaaaaa');
+                  onSubmitted: (search) async{
+                    await controller.houseRepository.searchHouse(search);
                   },
                 ),
               ],

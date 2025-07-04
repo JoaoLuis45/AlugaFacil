@@ -110,6 +110,38 @@ class HouseProvider {
     }
   }
 
+  Future<void> searchHouse(String search) async {
+    try {
+      final user = Get.find<UserController>();
+      final houseController = Get.find<HouseController>();
+      houseController.isLoading.value = true;
+      houseController.lista.clear();
+      final snapshot = await db
+          .collection('usuarios/${user.loggedUser.id}/imoveis')
+          .where('numeroCasa', isGreaterThanOrEqualTo: search).where('numeroCasa', isLessThanOrEqualTo: search + '\uf8ff').get();
+
+
+      snapshot.docs.forEach((doc) {
+        HouseModel casa = HouseModel(
+          dataAluguel: doc.get('dataAluguel'),
+          fotoCasa: doc.get('fotoCasa'),
+          inquilino: doc.get('inquilino'),
+          logradouro: doc.get('logradouro'),
+          cidade: doc.get('bairro'),
+          bairro: doc.get('cidade'),
+          id: doc.get('id'),
+          numeroCasa: doc.get('numeroCasa'),
+          valorAluguel: doc.get('valorAluguel'),
+        );
+        houseController.lista.add(casa);
+      });
+      houseController.isLoading.value = false;
+    } catch (e) {
+      //showMessageBar('Erro!', e.toString());
+      e.printError();
+    }
+  }
+
   Future<void> remove(HouseModel casa) async {
     final user = Get.find<UserController>();
     await db
@@ -120,4 +152,3 @@ class HouseProvider {
     houseController.lista.remove(casa);
   }
 }
-

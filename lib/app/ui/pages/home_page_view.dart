@@ -26,7 +26,7 @@ class HomePage extends GetView<HomePageController> {
         backgroundColor: brownColorTwo,
         iconTheme: IconThemeData(color: goldColorThree),
         title: Text(
-          'Meus Imóveis',
+          'AlugaFácil',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
             color: goldColorThree,

@@ -25,4 +25,8 @@ class HouseRepository {
   Future<void> read() {
     return houseProvider.read();
   }
+
+  Future<void> searchHouse(String search) {
+    return houseProvider.searchHouse(search);
+  }
 }

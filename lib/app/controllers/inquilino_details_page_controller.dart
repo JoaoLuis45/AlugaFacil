@@ -27,6 +27,8 @@ class InquilinoDetailsPageController extends GetxController {
 
   final HouseRepository houseRepository = HouseRepository(HouseProvider());
 
+  late List<dynamic?> listaCasasDisponiveis;
+
   @override
   void onInit() {
     super.onInit();
@@ -47,6 +49,8 @@ class InquilinoDetailsPageController extends GetxController {
 
   selectHouse(BuildContext context) {
     final houseController = Get.find<HouseController>();
+    listaCasasDisponiveis =
+        houseController.lista.where((e) => e!.inquilino == null).toList();
     showModalBottomSheet(
       backgroundColor: brownColorTwo,
       context: Get.context!,
@@ -83,10 +87,10 @@ class InquilinoDetailsPageController extends GetxController {
                 child: ListView.separated(
                   separatorBuilder: (context, index) =>
                       Divider(color: goldColorThree),
-                  itemCount: houseController.lista.length,
+                  itemCount: listaCasasDisponiveis.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final HouseModel house = houseController.lista[index];
+                    final HouseModel house = listaCasasDisponiveis[index];
                     return ListTile(
                       leading: Icon(
                         Icons.business_sharp,

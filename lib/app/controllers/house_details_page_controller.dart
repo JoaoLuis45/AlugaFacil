@@ -29,6 +29,8 @@ class HouseDetailsPageController extends GetxController {
 
   final isLoadingInquilino = false.obs;
 
+  late List<dynamic?> listaInquilinosDisponiveis;
+
   @override
   void onInit() async {
     super.onInit();
@@ -57,6 +59,8 @@ class HouseDetailsPageController extends GetxController {
 
   selectInquilino(BuildContext context) {
     final inquilinoController = Get.find<InquilinoPageController>();
+    listaInquilinosDisponiveis =
+        inquilinoController.lista.where((e) => e!.casaId == null).toList();
     showModalBottomSheet(
       backgroundColor: brownColorTwo,
       context: Get.context!,
@@ -93,11 +97,11 @@ class HouseDetailsPageController extends GetxController {
                 child: ListView.separated(
                   separatorBuilder: (context, index) =>
                       Divider(color: goldColorThree),
-                  itemCount: inquilinoController.lista.length,
+                  itemCount: listaInquilinosDisponiveis.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     final InquilinoModel inquilino =
-                        inquilinoController.lista[index];
+                        listaInquilinosDisponiveis[index];
                     return ListTile(
                       leading: Icon(
                         Icons.business_sharp,

@@ -15,6 +15,20 @@ class InquilinoPage extends GetView<InquilinoPageController> {
       body: Column(
         children: [
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Meus inquilinos',
+                style: TextStyle(
+                  color: brownColorTwo,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Padding(
             padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
