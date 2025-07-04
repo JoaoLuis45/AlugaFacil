@@ -17,4 +17,16 @@ class InquilinoRepository {
   Future<void> read() {
     return inquilinoProvider.read();
   }
+
+  Future<InquilinoModel?> getInquilino(cpf) {
+    return inquilinoProvider.getInquilino(cpf);
+  }
+
+  Future<void> setCasa(InquilinoModel inquilino) {
+    return inquilinoProvider.setCasa(inquilino);
+  }
+
+  Future<void> unsetCasa(InquilinoModel inquilino) {
+    return inquilinoProvider.unsetCasa(inquilino);
+  }
 }

@@ -21,9 +21,9 @@ class HouseModel {
     String? id,
     this.dataAluguel,
     this.inquilino,
-    }) : id = id ?? const Uuid().v4();
+  }) : id = id ?? const Uuid().v4();
 
-    factory HouseModel.fromJson(Map<String, dynamic> json) {
+  factory HouseModel.fromJson(Map<String, dynamic> json) {
     return HouseModel(
       logradouro: json['logradouro'],
       bairro: json['bairro'],
@@ -33,11 +33,11 @@ class HouseModel {
       valorAluguel: json['valorAluguel'],
       id: json['id'],
       dataAluguel: json['dataAluguel'],
-      inquilino: json['inquilino'], 
+      inquilino: json['inquilino'],
     );
-    }
+  }
 
-    Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'logradouro': logradouro,
       'bairro': bairro,
@@ -49,5 +49,5 @@ class HouseModel {
       'dataAluguel': dataAluguel?.toIso8601String(),
       'inquilino': inquilino,
     };
-    }
+  }
 }

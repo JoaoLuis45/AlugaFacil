@@ -1,5 +1,6 @@
 import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/utils/show_dialog_message.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,6 @@ class HousePage extends GetView<HouseController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.houseRepository.read();
     return Scaffold(
       body: Column(
         children: [
@@ -97,7 +97,9 @@ class HousePage extends GetView<HouseController> {
                               child: ListTile(
                                 leading: Hero(
                                   tag: casa,
-                                  child: casa.fotoCasa != null
+                                  child:
+                                      casa.fotoCasa != null &&
+                                          casa.fotoCasa != ''
                                       ? CircleAvatar(
                                           radius: 32,
                                           backgroundImage: NetworkImage(
@@ -114,14 +116,20 @@ class HousePage extends GetView<HouseController> {
                                   '${casa.numeroCasa} - ${casa.logradouro}',
                                 ),
                                 subtitle: Text(
-                                  'R\$ ${casa.valorAluguel.toStringAsFixed(2)}',
+                                  'R\$ ${casa.valorAluguel.toStringAsFixed(2)} >> ${casa.inquilino != null ? 'Alugada' : 'Disponível'}',
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(
                                     Icons.delete,
                                     color: brownColorTwo,
                                   ),
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    final result = await showDialogMessage(
+                                      context,
+                                      'Remover',
+                                      'Deseja remover essa casa?',
+                                    );
+                                    if (result != true) return;
                                     controller.houseRepository.remove(casa);
                                   },
                                 ),

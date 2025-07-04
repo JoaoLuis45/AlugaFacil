@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:aluga_facil/app/controllers/house_controller.dart';
+import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/models/user_data_model.dart';
 import 'package:aluga_facil/app/data/repositories/user_Repository.dart';
@@ -19,14 +21,18 @@ class HomePageController extends GetxController {
   final indexPage = dashboardTab.obs;
 
   final userController = Get.find<UserController>();
+  final inquilinoController = Get.find<InquilinoPageController>();
+  final houseController = Get.find<HouseController>();
 
   HomePageController(this._repository);
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     final user = _repository.getUserData();
     userController.loggedUser = user;
+    await inquilinoController.inquilinoRepository.read();
+    await houseController.houseRepository.read();
   }
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -68,6 +74,4 @@ class HomePageController extends GetxController {
       ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
-
-  
 }

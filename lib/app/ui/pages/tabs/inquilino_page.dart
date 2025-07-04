@@ -1,6 +1,7 @@
 import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/utils/show_dialog_message.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,6 @@ class InquilinoPage extends GetView<InquilinoPageController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.inquilinoRepository.read();
     return Scaffold(
       body: Column(
         children: [
@@ -91,7 +91,6 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                             child: Card(
                               color: goldColorThree,
                               elevation: 8,
-
                               child: ListTile(
                                 leading: Hero(
                                   tag: inquilino,
@@ -101,14 +100,22 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                                     size: 64,
                                   ),
                                 ),
-                                title: Text(inquilino.nome ?? ''),
+                                title: Text(
+                                  '${inquilino.nome} >> Casa: ${inquilino.casaNumero ?? 'Não vinculada'}',
+                                ),
                                 subtitle: Text(inquilino.cpf ?? ''),
                                 trailing: IconButton(
                                   icon: const Icon(
                                     Icons.delete,
                                     color: brownColorTwo,
                                   ),
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    final result = await showDialogMessage(
+                                      context,
+                                      'Remover',
+                                      'Deseja remover esse inquilino?',
+                                    );
+                                    if (result != true) return;
                                     controller.inquilinoRepository.remove(
                                       inquilino,
                                     );

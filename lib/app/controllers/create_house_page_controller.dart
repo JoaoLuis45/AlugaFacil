@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/repositories/house_repository.dart';
-import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
+
+import '../utils/showmessage.dart';
 
 class CreateHousePageController extends GetxController {
   TextEditingController inputNumeroCasa = TextEditingController();
@@ -102,14 +103,4 @@ class CreateHousePageController extends GetxController {
   }
 }
 
-showMessageBar(title, subtitle) {
-  Get.snackbar(
-    title,
-    subtitle,
-    backgroundColor: brownColorTwo,
-    colorText: goldColorThree,
-    duration: const Duration(seconds: 6),
-    snackPosition: SnackPosition.BOTTOM,
-    margin: const EdgeInsets.all(10),
-  );
-}
+

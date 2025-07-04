@@ -2,12 +2,8 @@ import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/databases/db_firestore.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
-import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
 
 class HouseProvider {
   late FirebaseFirestore db;
@@ -65,6 +61,24 @@ class HouseProvider {
         });
   }
 
+  Future<void> setInquilino(HouseModel casa) async {
+    final user = Get.find<UserController>();
+    await db
+        .collection('usuarios/${user.loggedUser.id}/imoveis')
+        .doc(casa.id.toString())
+        .update({'inquilino': casa.inquilino});
+    await read();
+  }
+
+  Future<void> unsetInquilino(String casaId) async {
+    final user = Get.find<UserController>();
+    await db
+        .collection('usuarios/${user.loggedUser.id}/imoveis')
+        .doc(casaId)
+        .update({'inquilino': null});
+    await read();
+  }
+
   Future<void> read() async {
     try {
       final user = Get.find<UserController>();
@@ -107,14 +121,3 @@ class HouseProvider {
   }
 }
 
-showMessageBar(title, subtitle) {
-  Get.snackbar(
-    title,
-    subtitle,
-    backgroundColor: brownColorTwo,
-    colorText: goldColorThree,
-    duration: const Duration(seconds: 6),
-    snackPosition: SnackPosition.BOTTOM,
-    margin: const EdgeInsets.all(10),
-  );
-}

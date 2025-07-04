@@ -1,4 +1,4 @@
-import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
+import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:aluga_facil/app/data/providers/house_provider.dart';
@@ -6,18 +6,20 @@ import 'package:aluga_facil/app/data/providers/inquilino_provider.dart';
 import 'package:aluga_facil/app/data/repositories/house_repository.dart';
 import 'package:aluga_facil/app/data/repositories/inquilino_repository.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/utils/normal_date.dart';
 import 'package:aluga_facil/app/utils/showmessage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HouseDetailsPageController extends GetxController {
-  final casa = HouseModel().obs;
+class InquilinoDetailsPageController extends GetxController {
+  final inquilino = InquilinoModel().obs;
 
-  TextEditingController inputNumeroCasa = TextEditingController();
-  TextEditingController inputLogradouro = TextEditingController();
-  TextEditingController inputBairro = TextEditingController();
-  TextEditingController inputCidade = TextEditingController();
-  TextEditingController inputvalorAluguel = TextEditingController();
+  TextEditingController inputNome = TextEditingController();
+  TextEditingController inputCpf = TextEditingController();
+  TextEditingController inputCelular = TextEditingController();
+  TextEditingController inputTelefone = TextEditingController();
+  TextEditingController inputEmail = TextEditingController();
+  TextEditingController inputDataNascimento = TextEditingController();
 
   final InquilinoRepository inquilinoRepository = InquilinoRepository(
     InquilinoProvider(),
@@ -25,38 +27,26 @@ class HouseDetailsPageController extends GetxController {
 
   final HouseRepository houseRepository = HouseRepository(HouseProvider());
 
-  final inquilino = InquilinoModel().obs;
-
-  final isLoadingInquilino = false.obs;
-
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    casa.value = Get.arguments;
-    getDetailsHouse();
-    await getInquilino();
+    inquilino.value = Get.arguments;
+    getDetailsInquilino();
   }
 
-  getInquilino() async {
-    if (casa.value.inquilino != null) {
-      isLoadingInquilino.value = true;
-      inquilino.value =
-          await inquilinoRepository.getInquilino(casa.value.inquilino) ??
-          InquilinoModel();
-      isLoadingInquilino.value = false;
-    }
+  getDetailsInquilino() {
+    inputNome.text = inquilino.value.nome ?? '';
+    inputCpf.text = inquilino.value.cpf ?? '';
+    inputCelular.text = inquilino.value.celular ?? '';
+    inputTelefone.text = inquilino.value.telefone ?? '';
+    inputEmail.text = inquilino.value.email ?? '';
+    inputDataNascimento.text = inquilino.value.dataNascimento == null
+        ? ''
+        : formatDate(inquilino.value.dataNascimento);
   }
 
-  getDetailsHouse() {
-    inputNumeroCasa.text = casa.value.numeroCasa ?? '';
-    inputLogradouro.text = casa.value.logradouro ?? '';
-    inputBairro.text = casa.value.bairro ?? '';
-    inputCidade.text = casa.value.cidade ?? '';
-    inputvalorAluguel.text = casa.value.valorAluguel?.toString() ?? '';
-  }
-
-  selectInquilino(BuildContext context) {
-    final inquilinoController = Get.find<InquilinoPageController>();
+  selectHouse(BuildContext context) {
+    final houseController = Get.find<HouseController>();
     showModalBottomSheet(
       backgroundColor: brownColorTwo,
       context: Get.context!,
@@ -78,14 +68,14 @@ class HouseDetailsPageController extends GetxController {
                   vertical: 32,
                 ),
                 child: Text(
-                  'Aqui você pode vincular um inquilino a essa casa.',
+                  'Aqui você pode vincular uma casa a esse inquilino.',
                   style: TextStyle(color: goldColorThree),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
                 child: Text(
-                  'Escolha um:',
+                  'Escolha uma:',
                   style: TextStyle(fontSize: 22, color: goldColorThree),
                 ),
               ),
@@ -93,38 +83,33 @@ class HouseDetailsPageController extends GetxController {
                 child: ListView.separated(
                   separatorBuilder: (context, index) =>
                       Divider(color: goldColorThree),
-                  itemCount: inquilinoController.lista.length,
+                  itemCount: houseController.lista.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final InquilinoModel inquilino =
-                        inquilinoController.lista[index];
+                    final HouseModel house = houseController.lista[index];
                     return ListTile(
                       leading: Icon(
                         Icons.business_sharp,
                         color: goldColorThree,
                       ),
                       title: Text(
-                        inquilino.cpf!,
+                        house.numeroCasa!,
                         style: TextStyle(color: goldColorThree),
                       ),
                       subtitle: Text(
-                        inquilino.nome!,
+                        house.logradouro!,
                         style: TextStyle(color: goldColorThree),
                       ),
                       onTap: () async {
-                        casa.update((val) {
-                          val!.inquilino = inquilino.cpf;
+                        inquilino.update((val) {
+                          val!.casaId = house.id;
+                          val.casaNumero = house.numeroCasa;
                         });
-                        inquilino.casaId = casa.value.id;
-                        inquilino.casaNumero = casa.value.numeroCasa;
-                        await inquilinoRepository.setCasa(inquilino);
-                        await getInquilino();
-                        await houseRepository.setInquilino(casa.value);
+                        await inquilinoRepository.setCasa(inquilino.value);
+                        house.inquilino = inquilino.value.cpf;
+                        await houseRepository.setInquilino(house);
                         Get.back();
-                        showMessageBar(
-                          'Sucesso',
-                          'Inquilino vinculado à casa!',
-                        );
+                        showMessageBar('Sucesso', 'Casa vinculada ao inquilino!');
                       },
                     );
                   },

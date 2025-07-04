@@ -1,8 +1,9 @@
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:aluga_facil/app/data/repositories/inquilino_repository.dart';
-import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../utils/showmessage.dart';
 
 class CreateInquilinoPageController extends GetxController {
   TextEditingController inputNome = TextEditingController();
@@ -15,7 +16,7 @@ class CreateInquilinoPageController extends GetxController {
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
   set isLoading(bool value) => _isLoading.value = value;
-
+  
   final InquilinoRepository inquilinoRepository;
 
   String dataNascimento = '';
@@ -47,7 +48,7 @@ class CreateInquilinoPageController extends GetxController {
 
     await inquilinoRepository.save(inquilino);
 
-    showMessageBar('Sucesso!', 'Novo imóvel cadastrado com sucesso!');
+    showMessageBar('Sucesso!', 'Novo inquilino cadastrado com sucesso!');
     isLoading = false;
 
     inquilinoRepository.read();
@@ -55,14 +56,4 @@ class CreateInquilinoPageController extends GetxController {
   }
 }
 
-showMessageBar(title, subtitle) {
-  Get.snackbar(
-    title,
-    subtitle,
-    backgroundColor: brownColorTwo,
-    colorText: goldColorThree,
-    duration: const Duration(seconds: 6),
-    snackPosition: SnackPosition.BOTTOM,
-    margin: const EdgeInsets.all(10),
-  );
-}
+
