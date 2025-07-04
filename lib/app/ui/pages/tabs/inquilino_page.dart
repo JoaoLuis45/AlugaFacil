@@ -19,7 +19,7 @@ class InquilinoPage extends GetView<InquilinoPageController> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Meus inquilinos',
+                'Meus Inquilinos',
                 style: TextStyle(
                   color: brownColorTwo,
                   fontSize: 24,
