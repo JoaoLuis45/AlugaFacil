@@ -1,10 +1,13 @@
 import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
+import 'package:aluga_facil/app/data/models/payment_model.dart';
 import 'package:aluga_facil/app/data/providers/house_provider.dart';
 import 'package:aluga_facil/app/data/providers/inquilino_provider.dart';
+import 'package:aluga_facil/app/data/providers/payment_provider.dart';
 import 'package:aluga_facil/app/data/repositories/house_repository.dart';
 import 'package:aluga_facil/app/data/repositories/inquilino_repository.dart';
+import 'package:aluga_facil/app/data/repositories/payment_repository.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/utils/showmessage.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +27,17 @@ class HouseDetailsPageController extends GetxController {
   );
 
   final HouseRepository houseRepository = HouseRepository(HouseProvider());
+  final PaymentRepository paymentRepository = PaymentRepository(
+    PaymentProvider(),
+  );
 
   final inquilino = InquilinoModel().obs;
 
   final isLoadingInquilino = false.obs;
 
-  late List<dynamic?> listaInquilinosDisponiveis;
+  late List<dynamic> listaInquilinosDisponiveis;
+
+  final listPayments = [].obs;
 
   @override
   void onInit() async {
@@ -37,6 +45,14 @@ class HouseDetailsPageController extends GetxController {
     casa.value = Get.arguments;
     getDetailsHouse();
     await getInquilino();
+    await getPayments();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Get.delete<HouseDetailsPageController>();
   }
 
   getInquilino() async {
@@ -57,10 +73,20 @@ class HouseDetailsPageController extends GetxController {
     inputvalorAluguel.text = casa.value.valorAluguel?.toString() ?? '';
   }
 
+  getPayments() async {
+    listPayments.value =
+        await paymentRepository.getPaymentsByHouseAndInquilino(
+          casa.value,
+          inquilino.value,
+        ) ??
+        [];
+  }
+
   selectInquilino(BuildContext context) {
     final inquilinoController = Get.find<InquilinoPageController>();
-    listaInquilinosDisponiveis =
-        inquilinoController.lista.where((e) => e!.casaId == null).toList();
+    listaInquilinosDisponiveis = inquilinoController.lista
+        .where((e) => e!.casaId == null)
+        .toList();
     showModalBottomSheet(
       backgroundColor: brownColorTwo,
       context: Get.context!,
@@ -124,6 +150,8 @@ class HouseDetailsPageController extends GetxController {
                         await inquilinoRepository.setCasa(inquilino);
                         await getInquilino();
                         await houseRepository.setInquilino(casa.value);
+                        await getInquilino();
+                        await getPayments();
                         Get.back();
                         showMessageBar(
                           'Sucesso',

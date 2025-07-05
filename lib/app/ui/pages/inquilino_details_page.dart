@@ -21,7 +21,12 @@ class InquilinoDetailsPage extends GetView<InquilinoDetailsPageController> {
         backgroundColor: brownColorOne,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed(
+                '/createInquilino',
+                arguments: controller.inquilino.value,
+              );
+            },
             icon: Icon(Icons.edit_square, color: goldColorThree),
           ),
         ],
@@ -120,53 +125,79 @@ class InquilinoDetailsPage extends GetView<InquilinoDetailsPageController> {
                             ),
                           ),
                         )
-                      : Card(
-                          elevation: 8,
-                          color: brownColorOne,
-                          child: ListTile(
-                            leading: Icon(Icons.person, color: goldColorThree),
-                            title: Text(
-                              'Número da casa: ${controller.inquilino.value.casaNumero}',
-                              style: TextStyle(
-                                color: goldColorThree,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                      : Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Casa Vinculada',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: brownColorTwo,
+                                ),
                               ),
                             ),
-                            subtitle: Text(
-                              controller.inquilino.value.casaId ?? '',
-                              style: TextStyle(
-                                color: goldColorTwo,
-                                fontSize: 16,
+                            Card(
+                              elevation: 8,
+                              color: brownColorOne,
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.person,
+                                  color: goldColorThree,
+                                ),
+                                title: Text(
+                                  'Número da casa: ${controller.inquilino.value.casaNumero}',
+                                  style: TextStyle(
+                                    color: goldColorThree,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  controller.inquilino.value.casaId ?? '',
+                                  style: TextStyle(
+                                    color: goldColorTwo,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: goldColorThree,
+                                  ),
+                                  onPressed: () async {
+                                    final result = await showDialogMessage(
+                                      context,
+                                      'Desvincular Casa',
+                                      'Deseja desvincular essa casa?',
+                                    );
+                                    if (result != true) return;
+                                    await controller.houseRepository
+                                        .unsetInquilino(
+                                          controller.inquilino.value.casaId!,
+                                        );
+                                    controller.inquilino.update((val) {
+                                      val!.casaId = null;
+                                      val.casaNumero = null;
+                                    });
+                                    await controller.inquilinoRepository
+                                        .unsetCasa(controller.inquilino.value);
+                                    showMessageBar(
+                                      'Sucesso',
+                                      'Casa desvinculada do usuário!',
+                                    );
+                                  },
+                                ),
+                                onTap: () {
+                                  Get.offNamed(
+                                    '/detailsHouse',
+                                    arguments: controller.casa.value,
+                                  );
+                                },
                               ),
                             ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete, color: goldColorThree),
-                              onPressed: () async {
-                                final result = await showDialogMessage(
-                                  context,
-                                  'Desvincular Casa',
-                                  'Deseja desvincular essa casa?',
-                                );
-                                if (result != true) return;
-                                await controller.houseRepository
-                                    .unsetInquilino(
-                                  controller.inquilino.value.casaId!,
-                                );
-                                controller.inquilino.update((val) {
-                                  val!.casaId = null;
-                                  val.casaNumero = null;
-                                });
-                                await controller.inquilinoRepository.unsetCasa(
-                                  controller.inquilino.value,
-                                );
-                                showMessageBar(
-                                  'Sucesso',
-                                  'Casa desvinculada do usuário!',
-                                );
-                              },
-                            ),
-                          ),
+                          ],
                         );
                 }),
                 Spacer(flex: 25),

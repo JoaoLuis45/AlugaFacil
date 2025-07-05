@@ -24,7 +24,6 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
             'Cadastrar um novo inquilino',
             style: TextStyle(fontSize: 20, color: goldColorThree),
           ),
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add_home))],
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -114,7 +113,9 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
                               borderRadius: BorderRadius.circular(15),
                             );
                         if (results != null && results.isNotEmpty) {
-                          controller.inputDataNascimento.text = formatDate(results.first);
+                          controller.inputDataNascimento.text = formatDate(
+                            results.first,
+                          );
                           controller.dataNascimento = results.first.toString();
                         }
                       },
@@ -159,7 +160,9 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
                           child: controller.isLoading
                               ? CircularProgressIndicator(color: goldColorOne)
                               : Text(
-                                  'Salvar Inquilino',
+                                  controller.isEditing.value
+                                      ? 'Atualizar Inquilino'
+                                      : 'Cadastrar Inquilino',
                                   style: TextStyle(
                                     color: goldColorThree,
                                     fontWeight: FontWeight.bold,

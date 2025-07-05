@@ -23,115 +23,132 @@ class HouseDetailsPage extends GetView<HouseDetailsPageController> {
         backgroundColor: brownColorOne,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.offNamed('/createHouse', arguments: controller.casa.value);
+            },
             icon: Icon(Icons.edit_square, color: goldColorThree),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: Get.height),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                Spacer(flex: 3),
-                Center(
-                  child: Hero(
-                    tag: controller.casa.value,
-                    child: Obx(() {
-                      return controller.casa.value.fotoCasa == null ||
-                              controller.casa.value.fotoCasa == ''
-                          ? CircleAvatar(
-                              radius: 82,
-                              backgroundColor: goldColorTwo,
-                              child: CircleAvatar(
-                                radius: 80,
-                                backgroundColor: brownColorTwo,
-                                child: Icon(
-                                  Icons.house,
-                                  color: goldColorThree,
-                                  size: 100,
-                                ),
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: 82,
-                              backgroundColor: goldColorTwo,
-                              child: CircleAvatar(
-                                radius: 80,
-                                backgroundImage: NetworkImage(
-                                  controller.casa.value.fotoCasa!,
-                                ),
-                              ),
-                            );
-                    }),
-                  ),
-                ),
-                Spacer(flex: 3),
-                VisualizeTextFormField(
-                  textController: controller.inputNumeroCasa,
-                  keyy: 'numerocasa',
-                  iconImage: Icons.house,
-                  title: 'Número da Casa',
-                ),
-                Spacer(flex: 2),
-                VisualizeTextFormField(
-                  textController: controller.inputLogradouro,
-                  keyy: 'logradouro',
-                  iconImage: Icons.location_on_sharp,
-                  title: 'Logradouro',
-                ),
-                Spacer(flex: 2),
-                VisualizeTextFormField(
-                  textController: controller.inputBairro,
-                  keyy: 'bairro',
-                  iconImage: Icons.share_location,
-                  title: 'Bairro',
-                ),
-                Spacer(flex: 2),
-                VisualizeTextFormField(
-                  textController: controller.inputCidade,
-                  keyy: 'cidade',
-                  iconImage: Icons.location_city_outlined,
-                  title: 'Cidade',
-                ),
-                Spacer(flex: 2),
-                VisualizeTextFormField(
-                  textController: controller.inputvalorAluguel,
-                  keyy: 'valorAluguel',
-                  iconImage: Icons.attach_money_sharp,
-                  title: 'Valor do Aluguel',
-                ),
-                Spacer(flex: 2),
-                Obx(() {
-                  return controller.casa.value.inquilino == null
-                      ? SizedBox(
-                          width: Get.width,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              controller.selectInquilino(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              elevation: 12,
-                              backgroundColor: brownColorOne,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                            child: Text(
-                              'Adicionar Inquilino',
-                              style: TextStyle(
-                                color: goldColorThree,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          children: [
+            SizedBox(height: 30),
+            Center(
+              child: Hero(
+                tag: controller.casa.value,
+                child: Obx(() {
+                  return controller.casa.value.fotoCasa == null ||
+                          controller.casa.value.fotoCasa == ''
+                      ? CircleAvatar(
+                          radius: 82,
+                          backgroundColor: goldColorTwo,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundColor: brownColorTwo,
+                            child: Icon(
+                              Icons.house,
+                              color: goldColorThree,
+                              size: 100,
                             ),
                           ),
                         )
-                      : controller.isLoadingInquilino.value
-                      ? CircularProgressIndicator(color: brownColorTwo)
-                      : Card(
+                      : CircleAvatar(
+                          radius: 82,
+                          backgroundColor: goldColorTwo,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: NetworkImage(
+                              controller.casa.value.fotoCasa!,
+                            ),
+                          ),
+                        );
+                }),
+              ),
+            ),
+            SizedBox(height: 30),
+            VisualizeTextFormField(
+              textController: controller.inputNumeroCasa,
+              keyy: 'numerocasa',
+              iconImage: Icons.house,
+              title: 'Número da Casa',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputLogradouro,
+              keyy: 'logradouro',
+              iconImage: Icons.location_on_sharp,
+              title: 'Logradouro',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputBairro,
+              keyy: 'bairro',
+              iconImage: Icons.share_location,
+              title: 'Bairro',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputCidade,
+              keyy: 'cidade',
+              iconImage: Icons.location_city_outlined,
+              title: 'Cidade',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputvalorAluguel,
+              keyy: 'valorAluguel',
+              iconImage: Icons.attach_money_sharp,
+              title: 'Valor do Aluguel',
+            ),
+            SizedBox(height: 20),
+            Obx(() {
+              return controller.casa.value.inquilino == null
+                  ? SizedBox(
+                      width: Get.width,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          controller.selectInquilino(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 12,
+                          backgroundColor: brownColorOne,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        child: Text(
+                          'Adicionar Inquilino',
+                          style: TextStyle(
+                            color: goldColorThree,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                  : controller.isLoadingInquilino.value
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(color: brownColorTwo),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Inquilino Vinculado',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: brownColorTwo,
+                            ),
+                          ),
+                        ),
+                        Card(
                           elevation: 8,
                           color: brownColorOne,
                           child: ListTile(
@@ -178,14 +195,25 @@ class HouseDetailsPage extends GetView<HouseDetailsPageController> {
                                 );
                               },
                             ),
+                            onTap: () {
+                              Get.offNamed(
+                                '/detailsInquilino',
+                                arguments: controller.inquilino.value,
+                              );
+                            },
                           ),
-                        );
-                }),
-                Spacer(flex: 5),
-                Obx(() {
-                  return Visibility(
-                    visible: controller.casa.value.inquilino != null,
-                    child: Column(
+                        ),
+                      ],
+                    );
+            }),
+            SizedBox(height: 20),
+            Obx(() {
+              return Visibility(
+                visible: controller.casa.value.inquilino != null,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
@@ -198,85 +226,80 @@ class HouseDetailsPage extends GetView<HouseDetailsPageController> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            Card(
-                              elevation: 8,
-                              color: goldColorThree,
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.payment,
-                                  color: brownColorTwo,
-                                ),
-                                title: Text(
-                                  'Pagamento 1',
-                                  style: TextStyle(
-                                    color: brownColorTwo,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  'Valor do Pagamento',
-                                  style: TextStyle(
-                                    color: brownColorOne,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                trailing: IconButton(
-                                  icon: Icon(
-                                    Icons.visibility_rounded,
-                                    color: brownColorTwo,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                            Card(
-                              elevation: 8,
-                              color: goldColorThree,
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.payment,
-                                  color: brownColorTwo,
-                                ),
-                                title: Text(
-                                  'Pagamento 2',
-                                  style: TextStyle(
-                                    color: brownColorTwo,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  'Valor do Pagamento 2',
-                                  style: TextStyle(
-                                    color: brownColorOne,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                trailing: IconButton(
-                                  icon: Icon(
-                                    Icons.visibility_rounded,
-                                    color: brownColorTwo,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ],
+                        IconButton(
+                          icon: Icon(
+                            Icons.add_circle,
+                            color: goldColorThree,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            Get.toNamed(
+                              '/createPayment',
+                              arguments: controller.casa.value,
+                            );
+                          },
                         ),
                       ],
                     ),
-                  );
-                }),
-                Spacer(flex: 20),
-              ],
-            ),
-          ),
+                    SizedBox(height: 10),
+                    controller.listPayments.isEmpty
+                        ? Column(
+                            children: [
+                              SizedBox(height: 20),
+                              Icon(
+                                Icons.money_off,
+                                color: brownColorTwo,
+                                size: 48,
+                              ),
+                              Text(
+                                'Nenhum pagamento encontrado.',
+                                style: TextStyle(
+                                  color: brownColorTwo,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 1),
+                            itemCount: controller.listPayments.length,
+                            itemBuilder: (context, index) {
+                              final payment = controller.listPayments[index];
+                              return Card(
+                                color: brownColorTwo,
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.attach_money,
+                                    color: goldColorThree,
+                                  ),
+                                  title: Text(
+                                    'R\$ ${payment.valor.toStringAsFixed(2)}',
+                                    style: TextStyle(color: goldColorThree),
+                                  ),
+                                  subtitle: Text(
+                                    '${payment.formaPagamento} - ${payment.dataPagamento.toLocal().toString().split(' ')[0]}',
+                                    style: TextStyle(color: goldColorTwo),
+                                  ),
+                                  onTap: () {
+                                    Get.offNamed(
+                                      '/detailsPayment',
+                                      arguments: payment,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                  ],
+                ),
+              );
+            }),
+            SizedBox(height: 30),
+          ],
         ),
       ),
     );

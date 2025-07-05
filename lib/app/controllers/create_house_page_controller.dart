@@ -27,10 +27,38 @@ class CreateHousePageController extends GetxController {
 
   final fotoCasa = ''.obs;
   final isLoadingfotoCasa = false.obs;
-
+  final isEditing = false.obs;
+  final casa = HouseModel().obs;
   CreateHousePageController(this.houseRepository);
+
+  @override
+  void onInit() {
+    super.onInit();
+    editHouse();
+  }
+
   // DateTime? dataAluguel;
-  // String? inquilino;
+
+  editHouse() {
+    if (Get.arguments != null) {
+      casa.value = Get.arguments as HouseModel;
+      inputNumeroCasa.text = casa.value.numeroCasa ?? '';
+      inputLogradouro.text = casa.value.logradouro ?? '';
+      inputBairro.text = casa.value.bairro ?? '';
+      inputCidade.text = casa.value.cidade ?? '';
+      inputvalorAluguel.text = casa.value.valorAluguel?.toString() ?? '';
+      fotoCasa.value = casa.value.fotoCasa ?? '';
+      isEditing.value = true;
+    } else {
+      inputNumeroCasa.clear();
+      inputLogradouro.clear();
+      inputBairro.clear();
+      inputCidade.clear();
+      inputvalorAluguel.clear();
+      fotoCasa.value = '';
+      isEditing.value = false;
+    }
+  }
 
   saveHouse() async {
     if (inputNumeroCasa.text.trim().isEmpty) {
@@ -51,18 +79,29 @@ class CreateHousePageController extends GetxController {
     }
 
     isLoading = true;
-    HouseModel casa = HouseModel(
-      numeroCasa: inputNumeroCasa.text,
-      logradouro: inputLogradouro.text,
-      bairro: inputBairro.text,
-      cidade: inputCidade.text,
-      fotoCasa: fotoCasa.value,
-      valorAluguel: double.tryParse(inputvalorAluguel.text) ?? 0.0,
-    );
 
-    await houseRepository.save(casa);
+    if (isEditing.value) {
+      casa.value.numeroCasa = inputNumeroCasa.text;
+      casa.value.logradouro = inputLogradouro.text;
+      casa.value.bairro = inputBairro.text;
+      casa.value.cidade = inputCidade.text;
+      casa.value.fotoCasa = fotoCasa.value;
+      casa.value.valorAluguel = double.tryParse(inputvalorAluguel.text) ?? 0.0;
 
-    showMessageBar('Sucesso!', 'Novo imóvel cadastrado com sucesso!');
+      await houseRepository.update(casa.value);
+      showMessageBar('Sucesso!', 'Imóvel editado com sucesso!');
+    } else {
+      HouseModel casa = HouseModel(
+        numeroCasa: inputNumeroCasa.text,
+        logradouro: inputLogradouro.text,
+        bairro: inputBairro.text,
+        cidade: inputCidade.text,
+        fotoCasa: fotoCasa.value,
+        valorAluguel: double.tryParse(inputvalorAluguel.text) ?? 0.0,
+      );
+      await houseRepository.save(casa);
+      showMessageBar('Sucesso!', 'Novo imóvel cadastrado com sucesso!');
+    }
     isLoading = false;
 
     houseRepository.read();
@@ -102,5 +141,3 @@ class CreateHousePageController extends GetxController {
     }
   }
 }
-
-

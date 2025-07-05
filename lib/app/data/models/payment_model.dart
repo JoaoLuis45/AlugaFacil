@@ -1,12 +1,14 @@
+import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-class PaymentModel {
+class PaymentModel extends GetxController{
   String? casaId;
   String? inquilino;
   String? formaPagamento;
   double? valor;
   String? id;
   DateTime? dataPagamento;
+  final isExpanded = false.obs;
 
   PaymentModel({
     this.casaId,

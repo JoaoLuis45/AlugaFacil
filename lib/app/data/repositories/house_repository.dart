@@ -10,6 +10,10 @@ class HouseRepository {
     return houseProvider.save(casa);
   }
 
+  Future<void> update(HouseModel casa) {
+    return houseProvider.update(casa);
+  }
+
   Future<void> remove(HouseModel casa) {
     return houseProvider.remove(casa);
   }
@@ -26,7 +30,11 @@ class HouseRepository {
     return houseProvider.read();
   }
 
-  Future<void> searchHouse(String search) {
-    return houseProvider.searchHouse(search);
+  Future<void> search(String search) {
+    return houseProvider.search(search);
+  }
+
+  Future<HouseModel?> getCasa(String casaId) {
+    return houseProvider.getCasa(casaId);
   }
 }

@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:aluga_facil/app/controllers/financeiro_page_controller.dart';
 import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/models/user_data_model.dart';
 import 'package:aluga_facil/app/data/repositories/user_Repository.dart';
-import 'package:aluga_facil/app/ui/pages/tabs/tabs_list.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,11 +18,12 @@ class HomePageController extends GetxController {
   UserRepository get repository => _repository;
 
   final PageController pageController = PageController();
-  final indexPage = dashboardTab.obs;
+  final indexPage = 2.obs;
 
   final userController = Get.find<UserController>();
   final inquilinoController = Get.find<InquilinoPageController>();
   final houseController = Get.find<HouseController>();
+  final paymentController = Get.find<FinanceiroPageController>();
 
   HomePageController(this._repository);
 
@@ -31,11 +32,16 @@ class HomePageController extends GetxController {
     super.onInit();
     final user = _repository.getUserData();
     userController.loggedUser = user;
-    await inquilinoController.inquilinoRepository.read();
-    await houseController.houseRepository.read();
+    await refreshPages();
   }
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  refreshPages() async {
+    await inquilinoController.inquilinoRepository.read();
+    await houseController.houseRepository.read();
+    await paymentController.paymentRepository.read();
+  }
 
   _uploadImage() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);

@@ -35,7 +35,7 @@ class InquilinoPage extends GetView<InquilinoPageController> {
               children: [
                 AnimSearchBar(
                   width: Get.width * 0.9,
-                  helpText: 'Pesquisar Inquilino...',
+                  helpText: 'Pesquisar por nome...',
                   boxShadow: true,
                   textFieldColor: goldColorThree,
                   searchIconColor: goldColorThree,
@@ -44,8 +44,8 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                   textController: controller.searchController,
                   suffixIcon: const Icon(Icons.close, color: goldColorThree),
                   onSuffixTap: () {},
-                  onSubmitted: (a) {
-                    // print('aaaaaaaaaaaaa');
+                  onSubmitted: (search) async {
+                    await controller.inquilinoRepository.search(search);
                   },
                 ),
               ],
@@ -89,6 +89,16 @@ class InquilinoPage extends GetView<InquilinoPageController> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            controller.inquilinoRepository.read();
+                          },
+                          style: IconButton.styleFrom(
+                            backgroundColor: brownColorTwo,
+                            shape: CircleBorder(),
+                          ),
+                          icon: Icon(Icons.refresh, color: goldColorThree),
                         ),
                       ],
                     ),

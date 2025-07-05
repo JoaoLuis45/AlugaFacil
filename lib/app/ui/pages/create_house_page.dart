@@ -20,12 +20,6 @@ class CreateHousePage extends GetView<CreateHousePageController> {
             'Criar um novo imóvel',
             style: TextStyle(fontSize: 20, color: goldColorThree),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.person_add_alt_1_sharp),
-            ),
-          ],
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -149,6 +143,7 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                       keyy: 'valorAluguel',
                       iconImage: Icons.attach_money_sharp,
                       isPassword: false,
+                      keyboardType: TextInputType.number,
                       textController: controller.inputvalorAluguel,
                       title: 'Valor do Aluguel',
                       controller: InputFormFieldController(),
@@ -170,7 +165,9 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                           child: controller.isLoading
                               ? CircularProgressIndicator(color: goldColorOne)
                               : Text(
-                                  'Salvar Imóvel',
+                                  controller.isEditing.value
+                                      ? 'Editar Imóvel'
+                                      : 'Criar Imóvel',
                                   style: TextStyle(
                                     color: goldColorThree,
                                     fontWeight: FontWeight.bold,

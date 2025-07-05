@@ -61,6 +61,56 @@ class HouseProvider {
         });
   }
 
+  Future<void> update(HouseModel casa) async {
+    final user = Get.find<UserController>();
+    final houseController = Get.find<HouseController>();
+    houseController.lista.add(casa);
+    await db
+        .collection('usuarios/${user.loggedUser.id}/imoveis')
+        .doc(casa.id.toString())
+        .set({
+          'id': casa.id,
+          'numeroCasa': casa.numeroCasa,
+          'logradouro': casa.logradouro,
+          'bairro': casa.bairro,
+          'cidade': casa.cidade,
+          'fotoCasa': casa.fotoCasa,
+          'valorAluguel': casa.valorAluguel,
+          'dataAluguel': casa.dataAluguel,
+          'inquilino': casa.inquilino,
+        }, SetOptions(merge: true));
+  }
+
+  Future<HouseModel?> getCasa(String casaId) async {
+    try {
+      final user = Get.find<UserController>();
+      final snapshot = await db
+          .collection('usuarios/${user.loggedUser.id}/imoveis')
+          .where('id', isEqualTo: casaId)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final doc = snapshot.docs.first;
+        return HouseModel(
+          dataAluguel: doc.get('dataAluguel'),
+          fotoCasa: doc.get('fotoCasa'),
+          inquilino: doc.get('inquilino'),
+          logradouro: doc.get('logradouro'),
+          cidade: doc.get('bairro'),
+          bairro: doc.get('cidade'),
+          id: doc.get('id'),
+          numeroCasa: doc.get('numeroCasa'),
+          valorAluguel: doc.get('valorAluguel'),
+        );
+      }else{
+        return null;
+      }
+    } catch (e) {
+      e.printError();
+    }
+    return null;
+  }
+
   Future<void> setInquilino(HouseModel casa) async {
     final user = Get.find<UserController>();
     await db
@@ -110,7 +160,7 @@ class HouseProvider {
     }
   }
 
-  Future<void> searchHouse(String search) async {
+  Future<void> search(String search) async {
     try {
       final user = Get.find<UserController>();
       final houseController = Get.find<HouseController>();

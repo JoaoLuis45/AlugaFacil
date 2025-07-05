@@ -1,9 +1,17 @@
 import 'package:aluga_facil/app/controllers/create_payment_page_controller.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/state_manager.dart';
+import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/ui/widgets/controllers/input_form_field_controller.dart';
+import 'package:aluga_facil/app/ui/widgets/input_form_field.dart';
+import 'package:aluga_facil/app/utils/mask_formatters.dart';
+import 'package:aluga_facil/app/utils/normal_date.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 class CreatePaymentPage extends GetView<CreatePaymentPageController> {
-  const CreatePaymentPage({super.key});
+  CreatePaymentPage({super.key});
+  final _dates = [DateTime.now()];
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +21,9 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
           backgroundColor: brownColorTwo,
           iconTheme: IconThemeData(color: goldColorThree),
           title: Text(
-            'Cadastrar um novo inquilino',
+            'Criar Pagamento',
             style: TextStyle(fontSize: 20, color: goldColorThree),
           ),
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add_home))],
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -36,7 +43,7 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
                   children: [
                     Spacer(flex: 5),
                     Text(
-                      'Informações do Inquilino',
+                      'Informações do Pagamento',
                       style: TextStyle(
                         fontSize: 20,
                         color: goldColorThree,
@@ -44,56 +51,38 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
                       ),
                     ),
                     Spacer(),
-                    InputTextFormField(
-                      keyy: 'nome',
-                      iconImage: Icons.person,
-                      isPassword: false,
-                      textController: controller.inputNome,
-                      title: 'Nome',
-                      controller: InputFormFieldController(),
-                    ),
-                    Spacer(),
-                    InputTextFormField(
-                      keyy: 'cpf',
-                      maskformatter: [maskFormatterCPF],
-                      iconImage: Icons.numbers,
-                      isPassword: false,
-                      textController: controller.inputCpf,
-                      title: 'CPF',
-                      controller: InputFormFieldController(),
-                    ),
-                    Spacer(),
-                    InputTextFormField(
-                      keyy: 'celular',
-                      maskformatter: [maskFormatterNumberPhone],
-                      iconImage: Icons.smartphone,
-                      isPassword: false,
-                      textController: controller.inputCelular,
-                      title: 'Celular',
-                      controller: InputFormFieldController(),
-                    ),
-                    Spacer(),
-                    InputTextFormField(
-                      keyy: 'telefone',
-                      maskformatter: [maskFormatterNumberPhone],
-                      iconImage: Icons.phone,
-                      isPassword: false,
-                      textController: controller.inputTelefone,
-                      title: 'Telefone',
-                      controller: InputFormFieldController(),
-                    ),
-                    Spacer(),
-                    InputTextFormField(
-                      keyy: 'email',
-                      iconImage: Icons.email,
-                      isPassword: false,
-                      textController: controller.inputEmail,
-                      title: 'Email',
-                      controller: InputFormFieldController(),
+                    TextFormField(
+                      controller: controller.inputCasaId,
+                      onTap: () async {
+                        controller.selectHouse(context);
+                      },
+                      readOnly: true,
+                      style: const TextStyle(
+                        color: goldColorTwo,
+                        fontFamily: 'Raleway',
+                      ),
+                      decoration: InputDecoration(
+                        fillColor: brownColorTwo,
+                        filled: true,
+                        labelText: 'Escolha a Casa',
+                        labelStyle: TextStyle(color: goldColorTwo),
+                        prefixIcon: Icon(
+                          Icons.home_outlined,
+                          color: goldColorTwo,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: goldColorTwo, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: goldColorTwo, width: 2),
+                        ),
+                      ),
                     ),
                     Spacer(),
                     TextFormField(
-                      controller: controller.inputDataNascimento,
+                      controller: controller.inputDataPagamento,
                       inputFormatters: [maskFormatterDate],
                       onTap: () async {
                         List<DateTime?>? results =
@@ -106,8 +95,10 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
                               borderRadius: BorderRadius.circular(15),
                             );
                         if (results != null && results.isNotEmpty) {
-                          controller.inputDataNascimento.text = formatDate(results.first);
-                          controller.dataNascimento = results.first.toString();
+                          controller.inputDataPagamento.text = formatDate(
+                            results.first,
+                          );
+                          controller.dataPagamento = results.first.toString();
                         }
                       },
                       readOnly: true,
@@ -118,7 +109,7 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
                       decoration: InputDecoration(
                         fillColor: brownColorTwo,
                         filled: true,
-                        labelText: 'Data de Nascimento',
+                        labelText: 'Data de Pagamento',
                         labelStyle: TextStyle(color: goldColorTwo),
                         prefixIcon: Icon(
                           Icons.today_outlined,
@@ -134,7 +125,65 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
                         ),
                       ),
                     ),
-                    Spacer(flex: 5),
+                    Spacer(),
+                    MultiDropdown(
+                      controller: controller.multiController,
+                      items: controller.paymentList,
+                      onSelectionChange: (selectedItems) {
+                        if (selectedItems.isNotEmpty) {
+                          controller.inputFormaPagamento.text =
+                              selectedItems.first.name;
+                        } else {
+                          controller.inputFormaPagamento.text = '';
+                        }
+                      },
+                      singleSelect: true,
+                      searchEnabled: false,
+                      fieldDecoration: FieldDecoration(
+                        labelText: 'Forma de Pagamento',
+                        showClearIcon: false,
+                        suffixIcon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: goldColorTwo,
+                        ),
+                        hintStyle: TextStyle(color: goldColorTwo),
+                        backgroundColor: brownColorTwo,
+                        prefixIcon: Icon(
+                          Icons.monetization_on_outlined,
+                          color: goldColorTwo,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: goldColorTwo, width: 2),
+                        ),
+                        labelStyle: TextStyle(color: goldColorTwo),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: goldColorTwo, width: 2),
+                        ),
+                      ),
+                      dropdownDecoration: DropdownDecoration(
+                        backgroundColor: brownColorTwo,
+                        elevation: 8,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      dropdownItemDecoration: DropdownItemDecoration(
+                        textColor: goldColorTwo,
+                        selectedTextColor: goldColorThree,
+                        selectedBackgroundColor: brownColorOne,
+                      ),
+                    ),
+                    Spacer(),
+                    InputTextFormField(
+                      keyy: 'valor',
+                      iconImage: Icons.attach_money_sharp,
+                      isPassword: false,
+                      keyboardType: TextInputType.number,
+                      textController: controller.inputValor,
+                      title: 'Valor',
+                      controller: InputFormFieldController(),
+                    ),
+                    Spacer(flex: 3),
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -146,12 +195,14 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
                       child: Obx(() {
                         return TextButton(
                           onPressed: () {
-                            controller.saveInquilino();
+                            controller.savePayment();
                           },
                           child: controller.isLoading
                               ? CircularProgressIndicator(color: goldColorOne)
                               : Text(
-                                  'Salvar Inquilino',
+                                  controller.isEditing.value
+                                      ? 'Editar Pagamento'
+                                      : 'Criar Pagamento',
                                   style: TextStyle(
                                     color: goldColorThree,
                                     fontWeight: FontWeight.bold,
@@ -169,6 +220,6 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
           ),
         ),
       ),
-    );;
+    );
   }
 }

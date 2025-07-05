@@ -27,13 +27,24 @@ class InquilinoDetailsPageController extends GetxController {
 
   final HouseRepository houseRepository = HouseRepository(HouseProvider());
 
-  late List<dynamic?> listaCasasDisponiveis;
+  late List<dynamic> listaCasasDisponiveis;
+
+  final casa = HouseModel().obs;
 
   @override
-  void onInit() {
+  void onInit() async{
     super.onInit();
     inquilino.value = Get.arguments;
     getDetailsInquilino();
+    if(inquilino.value.casaId != null) {
+      casa.value = (await houseRepository.getCasa(inquilino.value.casaId!))!;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<InquilinoDetailsPageController>();
   }
 
   getDetailsInquilino() {

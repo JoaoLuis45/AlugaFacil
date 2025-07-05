@@ -4,7 +4,7 @@ import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/providers/user_provider.dart';
 import 'package:aluga_facil/app/data/repositories/user_repository.dart';
 import 'package:aluga_facil/app/routes/app_routes.dart';
-import 'package:aluga_facil/app/ui/pages/home_page_view.dart';
+import 'package:aluga_facil/app/ui/pages/home_page.dart';
 import 'package:aluga_facil/app/ui/pages/welcome_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

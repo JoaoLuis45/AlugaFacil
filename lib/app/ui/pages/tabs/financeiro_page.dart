@@ -1,12 +1,9 @@
 import 'package:aluga_facil/app/controllers/financeiro_page_controller.dart';
-import 'package:aluga_facil/app/data/models/payment_model.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/utils/normal_date.dart';
-import 'package:aluga_facil/app/utils/show_dialog_message.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
 class FinanceiroPage extends GetView<FinanceiroPageController> {
   const FinanceiroPage({super.key});
@@ -37,7 +34,7 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
               children: [
                 AnimSearchBar(
                   width: Get.width * 0.9,
-                  helpText: 'Pesquisar Inquilino...',
+                  helpText: 'Pesquisar por valor...',
                   boxShadow: true,
                   textFieldColor: goldColorThree,
                   searchIconColor: goldColorThree,
@@ -46,8 +43,8 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
                   textController: controller.searchController,
                   suffixIcon: const Icon(Icons.close, color: goldColorThree),
                   onSuffixTap: () {},
-                  onSubmitted: (a) {
-                    // print('aaaaaaaaaaaaa');
+                  onSubmitted: (search) async {
+                    await controller.paymentRepository.search(search);
                   },
                 ),
               ],
@@ -62,9 +59,13 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
                 elevation: 8,
                 child: IconButton(
                   onPressed: () {
-                    // Get.toNamed('/createInquilino');
+                    Get.toNamed('/createPayment');
                   },
-                  icon: Icon(Icons.attach_money_rounded, color: goldColorThree, size: 32),
+                  icon: Icon(
+                    Icons.attach_money_rounded,
+                    color: goldColorThree,
+                    size: 32,
+                  ),
                 ),
               ),
             ),
@@ -92,65 +93,105 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        IconButton(
+                          style: IconButton.styleFrom(
+                            backgroundColor: brownColorTwo,
+                            shape: CircleBorder(),
+                          ),
+                          icon: Icon(Icons.refresh, color: goldColorThree),
+                          onPressed: () {
+                            controller.paymentRepository.read();
+                          },
+                        ),
                       ],
                     ),
                   )
                 : Expanded(
                     child: RefreshIndicator(
                       onRefresh: () => controller.paymentRepository.read(),
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          final PaymentModel payment =
-                              controller.lista[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Card(
-                              color: goldColorThree,
-                              elevation: 8,
-                              child: ListTile(
-                                leading: Hero(
-                                  tag: payment,
-                                  child: Icon(
-                                    Icons.attach_money_outlined,
-                                    color: brownColorTwo,
-                                    size: 64,
+                      child: Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ListView.separated(
+                            padding: const EdgeInsets.all(8),
+                            itemCount: controller.lista.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final payment = controller.lista[index];
+                              return Obx(() {
+                                return Card(
+                                  color: goldColorThree,
+                                  elevation: 8,
+                                  child: ExpansionPanelList(
+                                    expansionCallback: (i, isExpanded) {
+                                      payment.isExpanded.value =
+                                          !payment.isExpanded.value;
+                                    },
+                                    children: [
+                                      ExpansionPanel(
+                                        backgroundColor: goldColorThree,
+                                        headerBuilder: (context, isExpanded) {
+                                          return ListTile(
+                                            leading: Hero(
+                                              tag: payment,
+                                              child: Icon(
+                                                Icons.attach_money_outlined,
+                                                color: brownColorTwo,
+                                                size: 64,
+                                              ),
+                                            ),
+                                            title: Text(
+                                              '${payment.valor!.toStringAsFixed(2)} >> Forma pagamento: ${payment.formaPagamento ?? 'Não informada'}',
+                                            ),
+                                            subtitle: Text(
+                                              formatDate(payment.dataPagamento),
+                                            ),
+                                          );
+                                        },
+                                        body: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                Get.toNamed(
+                                                  '/detailsPayment',
+                                                  arguments: payment,
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.visibility_rounded,
+                                                color: brownColorTwo,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.share,
+                                                color: brownColorTwo,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.monetization_on_rounded,
+                                                color: brownColorTwo,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        isExpanded: payment.isExpanded.value,
+                                        canTapOnHeader: true,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                title: Text(
-                                  '${payment.valor!.toStringAsFixed(2)} >> Forma pagamento: ${payment.formaPagamento ?? 'Não informada'}',
-                                ),
-                                subtitle: Text(formatDate(payment.dataPagamento)),
-                                trailing: IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: brownColorTwo,
-                                  ),
-                                  onPressed: () async {
-                                    final result = await showDialogMessage(
-                                      context,
-                                      'Deletar',
-                                      'Deseja deletar esse pagamento?',
-                                    );
-                                    if (result != true) return;
-                                    controller.paymentRepository.remove(
-                                      payment,
-                                    );
-                                  },
-                                ),
-                                onTap: () {
-                                  // Get.toNamed(
-                                  //   '/detailsInquilino',
-                                  //   arguments: payment,
-                                  // );
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 10),
-                        itemCount: controller.lista.length,
-                      ),
+                                );
+                              });
+                            },
+                          ),
+                        );
+                      }),
                     ),
                   );
           }),

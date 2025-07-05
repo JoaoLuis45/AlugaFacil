@@ -34,7 +34,7 @@ class HousePage extends GetView<HouseController> {
               children: [
                 AnimSearchBar(
                   width: Get.width * 0.9,
-                  helpText: 'Pesquisar Imóvel...',
+                  helpText: 'Pesquisar por número...',
                   boxShadow: true,
                   textFieldColor: goldColorThree,
                   searchIconColor: goldColorThree,
@@ -43,8 +43,8 @@ class HousePage extends GetView<HouseController> {
                   textController: controller.searchController,
                   suffixIcon: const Icon(Icons.close, color: goldColorThree),
                   onSuffixTap: () {},
-                  onSubmitted: (search) async{
-                    await controller.houseRepository.searchHouse(search);
+                  onSubmitted: (search) async {
+                    await controller.houseRepository.search(search);
                   },
                 ),
               ],
@@ -92,6 +92,16 @@ class HousePage extends GetView<HouseController> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            controller.houseRepository.read();
+                          },
+                          style: IconButton.styleFrom(
+                            backgroundColor: brownColorTwo,
+                            shape: CircleBorder(),
+                          ),
+                          icon: Icon(Icons.refresh, color: goldColorThree),
                         ),
                       ],
                     ),

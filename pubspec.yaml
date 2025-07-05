@@ -46,6 +46,7 @@ dependencies:
   anim_search_bar: ^2.0.3
   calendar_date_picker2: ^2.0.1
   mask_text_input_formatter: ^2.9.0
+  multi_dropdown: ^3.0.1
 
 dev_dependencies:
   flutter_test:

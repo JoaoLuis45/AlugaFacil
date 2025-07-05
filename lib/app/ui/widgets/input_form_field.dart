@@ -10,6 +10,7 @@ class InputTextFormField extends StatelessWidget {
   final bool isPassword;
   final String keyy;
   final String title;
+  final TextInputType? keyboardType;
   final IconData iconImage;
   List<TextInputFormatter>? maskformatter;
   final InputFormFieldController controller;
@@ -23,6 +24,7 @@ class InputTextFormField extends StatelessWidget {
     required this.iconImage,
     required this.controller,
     this.maskformatter,
+    this.keyboardType,
   });
 
   @override
@@ -34,7 +36,7 @@ class InputTextFormField extends StatelessWidget {
         inputFormatters: maskformatter,
         style: const TextStyle(color: goldColorThree, fontFamily: 'Raleway'),
         autocorrect: false,
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: keyboardType ?? TextInputType.text,
         obscureText: isPassword ? !controller.isVisible : controller.isVisible,
         decoration: InputDecoration(
           border: const OutlineInputBorder(

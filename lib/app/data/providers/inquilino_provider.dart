@@ -40,6 +40,25 @@ class InquilinoProvider {
         });
   }
 
+  Future<void> update(InquilinoModel inquilino) async {
+    final user = Get.find<UserController>();
+    final inquilinoController = Get.find<InquilinoPageController>();
+    inquilinoController.lista.add(inquilino);
+    await db
+        .collection('usuarios/${user.loggedUser.id}/inquilinos')
+        .doc(inquilino.cpf.toString())
+        .set({
+          'cpf': inquilino.cpf,
+          'celular': inquilino.celular,
+          'dataNascimento': inquilino.dataNascimento,
+          'email': inquilino.email,
+          'nome': inquilino.nome,
+          'telefone': inquilino.telefone,
+          'casaNumero': inquilino.casaNumero,
+          'casaId': inquilino.casaId,
+        }, SetOptions(merge: true));
+  }
+
   Future<void> setCasa(InquilinoModel inquilino) async {
     final user = Get.find<UserController>();
     await db
@@ -119,6 +138,35 @@ class InquilinoProvider {
       e.printError();
     }
     return null;
+  }
+
+  Future<void> search(String search) async {
+    try {
+      final user = Get.find<UserController>();
+      final inquilinoController = Get.find<InquilinoPageController>();
+      inquilinoController.isLoading.value = true;
+      inquilinoController.lista.clear();
+      final snapshot = await db
+          .collection('usuarios/${user.loggedUser.id}/inquilinos')
+          .where('nome', isGreaterThanOrEqualTo: search).where('nome', isLessThanOrEqualTo: search + '\uf8ff').get();
+      snapshot.docs.forEach((doc) {
+         InquilinoModel inquilino = InquilinoModel(
+          nome: doc.get('nome'),
+          casaId: doc.get('casaId'),
+          email: doc.get('email'),
+          cpf: doc.get('cpf'),
+          telefone: doc.get('telefone'),
+          celular: doc.get('celular'),
+          dataNascimento: (doc.get('dataNascimento') as Timestamp).toDate(),
+          casaNumero: doc.get('casaNumero'),
+        );
+        inquilinoController.lista.add(inquilino);
+      });
+      inquilinoController.isLoading.value = false;
+    } catch (e) {
+      //showMessageBar('Erro!', e.toString());
+      e.printError();
+    }
   }
 
   Future<void> remove(InquilinoModel inquilino) async {

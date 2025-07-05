@@ -10,6 +10,10 @@ class InquilinoRepository {
     return inquilinoProvider.save(inquilino);
   }
 
+  Future<void> update(InquilinoModel inquilino) {
+    return inquilinoProvider.update(inquilino);
+  }
+
   Future<void> remove(InquilinoModel inquilino) {
     return inquilinoProvider.remove(inquilino);
   }
@@ -28,5 +32,9 @@ class InquilinoRepository {
 
   Future<void> unsetCasa(InquilinoModel inquilino) {
     return inquilinoProvider.unsetCasa(inquilino);
+  }
+
+  Future<void> search(String search) {
+    return inquilinoProvider.search(search);
   }
 }
