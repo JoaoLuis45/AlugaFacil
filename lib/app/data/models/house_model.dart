@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class HouseModel {
@@ -32,7 +33,7 @@ class HouseModel {
       fotoCasa: json['fotoCasa'],
       valorAluguel: json['valorAluguel'],
       id: json['id'],
-      dataAluguel: json['dataAluguel'],
+      dataAluguel: (json['dataAluguel'] as Timestamp?)?.toDate(),
       inquilino: json['inquilino'],
     );
   }

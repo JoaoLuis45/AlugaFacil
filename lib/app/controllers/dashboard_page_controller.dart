@@ -4,6 +4,7 @@ import 'package:aluga_facil/app/data/providers/payment_provider.dart';
 import 'package:aluga_facil/app/data/repositories/house_repository.dart';
 import 'package:aluga_facil/app/data/repositories/inquilino_repository.dart';
 import 'package:aluga_facil/app/data/repositories/payment_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -27,21 +28,24 @@ class DashboardPageController extends GetxController {
   final totalHousesAvailable = 0.obs;
   final totalHousesRented = 0.obs;
 
+  final totalTenantsUpToDate = 0.obs;
+  final totalTenantsOwing = 0.obs;
+
+  final listPaymentsTypeData = [].obs;
+  final listPaymentsData = [].obs;
+
   @override
   void onInit() async {
     tooltipBehavior = TooltipBehavior(enable: true);
-    await getDatas();
     super.onInit();
   }
 
   getDatas() async {
-    totalPaymentsReceivedNumber.value = await paymentRepository
-        .countPaymentsReceivedInCurrentMonth();
-    totalPaymentsReceivedAmout.value = await paymentRepository
-        .countAmoutPaymentsReceivedInCurrentMonth();
-
-    totalHousesAvailable.value = await houseRepository.getTotalHousesAvailable();
-    totalHousesRented.value = await houseRepository.getTotalHousesRented();
+    await paymentRepository.paymentsReceivedInCurrentMonth();
+    await paymentRepository.paymentsPendingInCurrentMonthAndTenantsSituation();
+    await paymentRepository.paymentsReceivedInCurrentMonthPerType();
+    await paymentRepository.paymentsReceivedInLastSixMonths();
+    await houseRepository.getSituationHouses();
   }
 
   String getCurrentMonthNamePtBr() {
@@ -62,18 +66,36 @@ class DashboardPageController extends GetxController {
     final now = DateTime.now();
     return monthNames[now.month - 1];
   }
+
+  String getMonthNamePtBr(int month) {
+    const monthNames = [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ];
+    return monthNames[month];
+  }
 }
 
 class PaymentsData {
   final String month;
-  final double amount;
+  final int amount;
 
   PaymentsData(this.month, this.amount);
 }
 
 class PaymentsTypeData {
   final String type;
-  final double amount;
+  final int amount;
 
   PaymentsTypeData(this.type, this.amount);
 }

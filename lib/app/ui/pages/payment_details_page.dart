@@ -164,34 +164,7 @@ class PaymentDetailsPage extends GetView<PaymentDetailsPageController> {
                       ),
                     ],
                   );
-                }),
-                SizedBox(height: 30),
-                SizedBox(
-                  width: Get.width,
-                  child: Card(
-                    color: brownColorOne,
-                    elevation: 8,
-                    child: IconButton(
-                      onPressed: () async {
-                        final result = await showDialogMessage(
-                          context,
-                          'Remover',
-                          'Deseja remover esse pagamento?',
-                        );
-                        if (result != true) return;
-                        controller.paymentRepository.remove(
-                          controller.payment.value,
-                        );
-                        showMessageBar(
-                          'Sucesso',
-                          'Pagamento removido com sucesso!',
-                        );
-                        Get.offNamed('/home');
-                      },
-                      icon: Icon(Icons.delete, color: goldColorThree, size: 32),
-                    ),
-                  ),
-                ),
+                }),             
                 Spacer(flex: 25),
               ],
             ),

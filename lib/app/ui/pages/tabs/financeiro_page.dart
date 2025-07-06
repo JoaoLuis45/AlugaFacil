@@ -1,6 +1,8 @@
 import 'package:aluga_facil/app/controllers/financeiro_page_controller.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/utils/normal_date.dart';
+import 'package:aluga_facil/app/utils/show_dialog_message.dart';
+import 'package:aluga_facil/app/utils/showmessage.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -176,6 +178,27 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
                                               onPressed: () {},
                                               icon: Icon(
                                                 Icons.monetization_on_rounded,
+                                                color: brownColorTwo,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () async {
+                                                final result =
+                                                    await showDialogMessage(
+                                                      context,
+                                                      'Remover',
+                                                      'Deseja remover esse pagamento?',
+                                                    );
+                                                if (result != true) return;
+                                                controller.paymentRepository
+                                                    .remove(payment);
+                                                showMessageBar(
+                                                  'Sucesso',
+                                                  'Pagamento removido com sucesso!',
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
                                                 color: brownColorTwo,
                                               ),
                                             ),

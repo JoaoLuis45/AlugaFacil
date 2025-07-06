@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aluga_facil/app/controllers/dashboard_page_controller.dart';
 import 'package:aluga_facil/app/controllers/financeiro_page_controller.dart';
 import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
@@ -24,6 +25,7 @@ class HomePageController extends GetxController {
   final inquilinoController = Get.find<InquilinoPageController>();
   final houseController = Get.find<HouseController>();
   final paymentController = Get.find<FinanceiroPageController>();
+  final dashBoardController = Get.find<DashboardPageController>();
 
   HomePageController(this._repository);
 
@@ -32,7 +34,6 @@ class HomePageController extends GetxController {
     super.onInit();
     final user = _repository.getUserData();
     userController.loggedUser = user;
-    await refreshPages();
   }
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -41,6 +42,7 @@ class HomePageController extends GetxController {
     await inquilinoController.inquilinoRepository.read();
     await houseController.houseRepository.read();
     await paymentController.paymentRepository.read();
+    await dashBoardController.getDatas();
   }
 
   _uploadImage() async {

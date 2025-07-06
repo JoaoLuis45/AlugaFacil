@@ -1,4 +1,5 @@
 import 'package:aluga_facil/app/Exceptions/invalid_date_aluguel.dart';
+import 'package:aluga_facil/app/controllers/dashboard_page_controller.dart';
 import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/databases/db_firestore.dart';
@@ -296,31 +297,23 @@ class HouseProvider {
     return dataAluguel;
   }
 
-    Future<int> getTotalHousesAvailable() async {
+    Future<void> getSituationHouses() async {
     try {
       final user = Get.find<UserController>();
+      final dashboardController = Get.find<DashboardPageController>();
       final snapshot = await db
           .collection('usuarios/${user.loggedUser.id}/imoveis')
-          .where('inquilino', isEqualTo: null)
           .get();
-      return snapshot.size;
+      int totalAvailable = 0;
+      for (var doc in snapshot.docs) {
+        if (doc.get('inquilino') == null) {
+          totalAvailable++;
+        }
+      }
+      dashboardController.totalHousesAvailable.value = totalAvailable;
+      dashboardController.totalHousesRented.value = snapshot.size - totalAvailable;
     } catch (e) {
       e.printError();
-      return 0;
-    }
-  }
-
-  Future<int> getTotalHousesRented() async {
-    try {
-      final user = Get.find<UserController>();
-      final snapshot = await db
-          .collection('usuarios/${user.loggedUser.id}/imoveis')
-          .where('inquilino', isNotEqualTo: '')
-          .get();
-      return snapshot.size;
-    } catch (e) {
-      e.printError();
-      return 0;
     }
   }
 }

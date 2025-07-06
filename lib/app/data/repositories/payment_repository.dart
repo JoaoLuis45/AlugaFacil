@@ -32,10 +32,19 @@ class PaymentRepository {
     return paymentProvider.search(search);
   }
 
-  Future<int> countPaymentsReceivedInCurrentMonth() {
-    return paymentProvider.countPaymentsReceivedInCurrentMonth();
+  Future<void> paymentsReceivedInCurrentMonth() {
+    return paymentProvider.paymentsReceivedInCurrentMonth();
   }
-  Future<double> countAmoutPaymentsReceivedInCurrentMonth() {
-    return paymentProvider.countAmoutPaymentsReceivedInCurrentMonth();
+
+  Future<void> paymentsPendingInCurrentMonthAndTenantsSituation() {
+    return paymentProvider.paymentsPendingInCurrentMonthAndTenantsSituation();
+  }
+
+  Future<void> paymentsReceivedInCurrentMonthPerType() {
+    return paymentProvider.paymentsReceivedInCurrentMonthPerType();
+  }
+
+  Future<void> paymentsReceivedInLastSixMonths() {
+    return paymentProvider.paymentsReceivedInLastSixMonths();
   }
 }

@@ -39,11 +39,7 @@ class HouseRepository {
     return houseProvider.getCasa(casaId);
   }
 
-  Future<int> getTotalHousesAvailable() {
-    return houseProvider.getTotalHousesAvailable();
-  }
-
-  Future<int> getTotalHousesRented() {
-    return houseProvider.getTotalHousesRented();
+  Future<void> getSituationHouses() {
+    return houseProvider.getSituationHouses();
   }
 }

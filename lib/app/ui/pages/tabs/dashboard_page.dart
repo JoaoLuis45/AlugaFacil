@@ -146,29 +146,31 @@ class DashboardPage extends GetView<DashboardPageController> {
                         ],
                       ),
                       SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            // 'R\$ ${controller.totalPendingPayments.value.toStringAsFixed(2)}',
-                            'R\$760.00',
-                            style: TextStyle(
-                              color: brownColorTwo,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
+                      Obx(() {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              // 'R\$ ${controller.totalPendingPayments.value.toStringAsFixed(2)}',
+                              'R\$${controller.totalPaymentsPendingAmout.value.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                color: brownColorTwo,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            // 'R\$ ${controller.totalPendingPayments.value.toStringAsFixed(2)}',
-                            'Total: 5',
-                            style: TextStyle(
-                              color: brownColorTwo,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              // 'R\$ ${controller.totalPendingPayments.value.toStringAsFixed(2)}',
+                              'Total: ${controller.totalPaymentsPendingNumber.value}',
+                              style: TextStyle(
+                                color: brownColorTwo,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -178,102 +180,96 @@ class DashboardPage extends GetView<DashboardPageController> {
           SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                labelStyle: TextStyle(color: goldColorThree),
-                majorGridLines: MajorGridLines(width: 0),
-              ),
-              primaryYAxis: NumericAxis(
-                majorGridLines: MajorGridLines(width: 1, color: goldColorThree),
-                majorTickLines: MajorTickLines(width: 1, color: goldColorThree),
-                labelStyle: TextStyle(color: goldColorThree),
-                interval: 20,
-              ),
-              // Chart title
+            child: Obx(() {
+              return SfCartesianChart(
+                primaryXAxis: CategoryAxis(
+                  labelStyle: TextStyle(color: goldColorThree),
+                  majorGridLines: MajorGridLines(width: 0),
+                ),
+                primaryYAxis: NumericAxis(
+                  majorGridLines: MajorGridLines(
+                    width: 1,
+                    color: goldColorThree,
+                  ),
+                  majorTickLines: MajorTickLines(
+                    width: 1,
+                    color: goldColorThree,
+                  ),
+                  labelStyle: TextStyle(color: goldColorThree),
+                  interval: 20,
+                ),
+                // Chart title
+                title: ChartTitle(
+                  text: 'Pagamentos por Mês',
+                  textStyle: TextStyle(
+                    color: goldColorThree,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                plotAreaBorderColor: goldColorThree,
+                plotAreaBorderWidth: 1,
+                legend: Legend(
+                  isVisible: true,
+                  textStyle: TextStyle(color: goldColorThree),
+                ),
+                tooltipBehavior: controller.tooltipBehavior,
+                borderColor: goldColorThree,
+                borderWidth: 2,
+                palette: [goldColorThree, brownColorTwo],
+                backgroundColor: brownColorTwo,
+                series: <LineSeries<dynamic, String>>[
+                  LineSeries<dynamic, String>(
+                    name: 'Quantidade de Pagamentos',
+                    dataSource: controller.listPaymentsData.value,
+                    xValueMapper: (dynamic sales, _) => sales.month,
+                    yValueMapper: (dynamic sales, _) => sales.amount,
+                    // Enable data label
+                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                  ),
+                ],
+              );
+            }),
+          ),
+          SizedBox(height: 10),
+          Obx(() {
+            return SfCircularChart(
               title: ChartTitle(
-                text: 'Pagamentos por Mês',
+                text: 'Pagamentos por Tipo (Mensal)',
                 textStyle: TextStyle(
-                  color: goldColorThree,
+                  color: brownColorTwo,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              plotAreaBorderColor: goldColorThree,
-              plotAreaBorderWidth: 1,
               legend: Legend(
                 isVisible: true,
-                textStyle: TextStyle(color: goldColorThree),
+                position: LegendPosition.right,
+                textStyle: TextStyle(color: brownColorTwo),
               ),
+              palette: [
+                goldColorOne,
+                goldColorTwo,
+                goldColorThree,
+                goldToBrownColor,
+                brownColorOne,
+                brownColorTwo,
+                brownColor,
+                Colors.amber,
+              ],
               tooltipBehavior: controller.tooltipBehavior,
-              borderColor: goldColorThree,
-              borderWidth: 2,
-              palette: [goldColorThree, brownColorTwo],
-              backgroundColor: brownColorTwo,
-              series: <LineSeries<PaymentsData, String>>[
-                LineSeries<PaymentsData, String>(
-                  name: 'Quantidade de Pagamentos',
-                  dataSource: <PaymentsData>[
-                    PaymentsData('Mai', 20),
-                    PaymentsData('Jun', 59),
-                    PaymentsData('Jul', 25),
-                    PaymentsData('Ago', 38),
-                    PaymentsData('Set', 41),
-                    PaymentsData('Out', 59),
-                  ],
-                  xValueMapper: (PaymentsData sales, _) => sales.month,
-                  yValueMapper: (PaymentsData sales, _) => sales.amount,
-                  // Enable data label
+              series: [
+                PieSeries<dynamic, String>(
+                  dataSource: controller.listPaymentsTypeData.value,
+                  xValueMapper: (dynamic data, _) => data.type,
+                  yValueMapper: (dynamic data, _) => data.amount,
                   dataLabelSettings: DataLabelSettings(isVisible: true),
+                  explode: true,
+                  explodeIndex: 0,
                 ),
               ],
-            ),
-          ),
-          SizedBox(height: 10),
-          SfCircularChart(
-            title: ChartTitle(
-              text: 'Pagamentos por Tipo',
-              textStyle: TextStyle(
-                color: brownColorTwo,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            legend: Legend(
-              isVisible: true,
-              position: LegendPosition.right,
-              textStyle: TextStyle(color: brownColorTwo),
-            ),
-            palette: [
-              goldColorOne,
-              goldColorTwo,
-              goldColorThree,
-              goldToBrownColor,
-              brownColorOne,
-              brownColorTwo,
-              brownColor,
-              Colors.amber,
-            ],
-            tooltipBehavior: controller.tooltipBehavior,
-            series: [
-              PieSeries<PaymentsTypeData, String>(
-                dataSource: <PaymentsTypeData>[
-                  PaymentsTypeData('Transferência', 3),
-                  PaymentsTypeData('Boleto', 2),
-                  PaymentsTypeData('Pix', 5),
-                  PaymentsTypeData('Promissória', 2),
-                  PaymentsTypeData('Crédito', 1),
-                  PaymentsTypeData('Débito', 7),
-                  PaymentsTypeData('Vale', 5),
-                  PaymentsTypeData('Dinheiro', 4),
-                ],
-                xValueMapper: (PaymentsTypeData data, _) => data.type,
-                yValueMapper: (PaymentsTypeData data, _) => data.amount,
-                dataLabelSettings: DataLabelSettings(isVisible: true),
-                explode: true,
-                explodeIndex: 0,
-              ),
-            ],
-          ),
+            );
+          }),
           SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -392,55 +388,59 @@ class DashboardPage extends GetView<DashboardPageController> {
                         ],
                       ),
                       SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                '5',
-                                style: TextStyle(
-                                  color: brownColorTwo,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
+                      Obx(() {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  controller.totalTenantsUpToDate.value
+                                      .toString(),
+                                  style: TextStyle(
+                                    color: brownColorTwo,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Em dia',
-                                style: TextStyle(
-                                  color: brownColorTwo,
-                                  fontSize: 16,
+                                Text(
+                                  'Em dia',
+                                  style: TextStyle(
+                                    color: brownColorTwo,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '15',
-                                style: TextStyle(
-                                  color: brownColorTwo,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  controller.totalTenantsOwing.value.toString(),
+                                  style: TextStyle(
+                                    color: brownColorTwo,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Devendo',
-                                style: TextStyle(
-                                  color: brownColorTwo,
-                                  fontSize: 16,
+                                Text(
+                                  'Devendo',
+                                  style: TextStyle(
+                                    color: brownColorTwo,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+          SizedBox(height: 50),
         ],
       ),
     );

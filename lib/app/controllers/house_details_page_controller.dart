@@ -51,7 +51,6 @@ class HouseDetailsPageController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     Get.delete<HouseDetailsPageController>();
   }
