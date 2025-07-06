@@ -3,6 +3,7 @@ import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/databases/db_firestore.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:get/instance_manager.dart';
 
@@ -84,6 +85,7 @@ class InquilinoProvider {
     try {
       final user = Get.find<UserController>();
       final inquilinoController = Get.find<InquilinoPageController>();
+      List inquilinos = [];
       inquilinoController.isLoading.value = true;
       inquilinoController.lista.clear();
       final snapshot = await db
@@ -100,8 +102,9 @@ class InquilinoProvider {
           dataNascimento: (doc.get('dataNascimento') as Timestamp).toDate(),
           casaNumero: doc.get('casaNumero'),
         );
-        inquilinoController.lista.add(inquilino);
+        inquilinos.add(inquilino);
       });
+      inquilinoController.lista.assignAll(inquilinos);
       inquilinoController.isLoading.value = false;
     } catch (e) {
       //showMessageBar('Erro!', e.toString());

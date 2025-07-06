@@ -62,7 +62,11 @@ class CreateInquilinoPageController extends GetxController {
     } else if (inputCpf.text.trim().isEmpty) {
       showMessageBar('Aviso!', 'O cpf do inquilino é obrigatório!');
       return;
+    }else if (inputDataNascimento.text.trim().isEmpty) {
+      showMessageBar('Aviso!', 'A data de nascimento do inquilino é obrigatória!');
+      return;
     }
+    
     isLoading = true;
     
     if (isEditing.value) {

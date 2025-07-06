@@ -233,42 +233,53 @@ class DashboardPage extends GetView<DashboardPageController> {
           ),
           SizedBox(height: 10),
           Obx(() {
-            return SfCircularChart(
-              title: ChartTitle(
-                text: 'Pagamentos por Tipo (Mensal)',
-                textStyle: TextStyle(
-                  color: brownColorTwo,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              legend: Legend(
-                isVisible: true,
-                position: LegendPosition.right,
-                textStyle: TextStyle(color: brownColorTwo),
-              ),
-              palette: [
-                goldColorOne,
-                goldColorTwo,
-                goldColorThree,
-                goldToBrownColor,
-                brownColorOne,
-                brownColorTwo,
-                brownColor,
-                Colors.amber,
-              ],
-              tooltipBehavior: controller.tooltipBehavior,
-              series: [
-                PieSeries<dynamic, String>(
-                  dataSource: controller.listPaymentsTypeData.value,
-                  xValueMapper: (dynamic data, _) => data.type,
-                  yValueMapper: (dynamic data, _) => data.amount,
-                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                  explode: true,
-                  explodeIndex: 0,
-                ),
-              ],
-            );
+            return controller.listPaymentsTypeData.isEmpty
+                ? Center(
+                    child: Text(
+                      'Nenhum dado disponível',
+                      style: TextStyle(
+                        color: goldColorThree,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : SfCircularChart(
+                    title: ChartTitle(
+                      text: 'Pagamentos por Tipo (Mensal)',
+                      textStyle: TextStyle(
+                        color: brownColorTwo,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.right,
+                      textStyle: TextStyle(color: brownColorTwo),
+                    ),
+                    palette: [
+                      goldColorOne,
+                      goldColorTwo,
+                      goldColorThree,
+                      goldToBrownColor,
+                      brownColorOne,
+                      brownColorTwo,
+                      brownColor,
+                      Colors.amber,
+                    ],
+                    tooltipBehavior: controller.tooltipBehavior,
+                    series: [
+                      PieSeries<dynamic, String>(
+                        dataSource: controller.listPaymentsTypeData.value,
+                        xValueMapper: (dynamic data, _) => data.type,
+                        yValueMapper: (dynamic data, _) => data.amount,
+                        dataLabelSettings: DataLabelSettings(isVisible: true),
+                        explode: true,
+                        explodeIndex: 0,
+                      ),
+                    ],
+                  );
           }),
           SizedBox(height: 10),
           Padding(

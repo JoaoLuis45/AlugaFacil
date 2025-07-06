@@ -7,6 +7,7 @@ import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:aluga_facil/app/data/models/payment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:get/instance_manager.dart';
 
@@ -63,6 +64,7 @@ class PaymentProvider {
     try {
       final user = Get.find<UserController>();
       final paymentController = Get.find<FinanceiroPageController>();
+      List payments = [];
       paymentController.isLoading.value = true;
       paymentController.lista.clear();
       final snapshot = await db
@@ -77,8 +79,9 @@ class PaymentProvider {
           inquilino: doc.get('inquilino'),
           valor: doc.get('valor'),
         );
-        paymentController.lista.add(payment);
+        payments.add(payment);
       });
+      paymentController.lista.assignAll(payments);
       paymentController.isLoading.value = false;
     } catch (e) {
       e.printError();
@@ -319,7 +322,7 @@ class PaymentProvider {
         }
       }
       dashboardController.listPaymentsTypeData.clear();
-      
+
       if (dinheiro > 0) {
         dashboardController.listPaymentsTypeData.add(
           PaymentsTypeData('Dinheiro', dinheiro),
@@ -380,8 +383,8 @@ class PaymentProvider {
       final user = Get.find<UserController>();
       final dashboardController = Get.find<DashboardPageController>();
       final now = DateTime.now().toUtc();
-       dashboardController.listPaymentsData.clear();
-      for(int i = 5; i != -1; i--) {
+      dashboardController.listPaymentsData.clear();
+      for (int i = 5; i != -1; i--) {
         final startDate = DateTime.utc(now.year, now.month - i, 1);
         final endDate = DateTime.utc(now.year, now.month - i + 1, 1);
         final snapshot2 = await db
@@ -390,10 +393,7 @@ class PaymentProvider {
               'dataPagamento',
               isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
             )
-            .where(
-              'dataPagamento',
-              isLessThan: Timestamp.fromDate(endDate),
-            )
+            .where('dataPagamento', isLessThan: Timestamp.fromDate(endDate))
             .get();
 
         int totalAmount = snapshot2.size;

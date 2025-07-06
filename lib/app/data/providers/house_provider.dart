@@ -146,6 +146,7 @@ class HouseProvider {
     try {
       final user = Get.find<UserController>();
       final houseController = Get.find<HouseController>();
+      List casas = [];
       houseController.isLoading.value = true;
       houseController.lista.clear();
       final snapshot = await db
@@ -164,8 +165,9 @@ class HouseProvider {
           numeroCasa: doc.get('numeroCasa'),
           valorAluguel: doc.get('valorAluguel'),
         );
-        houseController.lista.add(casa);
+        casas.add(casa);
       });
+      houseController.lista.assignAll(casas);
       houseController.isLoading.value = false;
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
@@ -297,7 +299,7 @@ class HouseProvider {
     return dataAluguel;
   }
 
-    Future<void> getSituationHouses() async {
+  Future<void> getSituationHouses() async {
     try {
       final user = Get.find<UserController>();
       final dashboardController = Get.find<DashboardPageController>();
@@ -311,7 +313,8 @@ class HouseProvider {
         }
       }
       dashboardController.totalHousesAvailable.value = totalAvailable;
-      dashboardController.totalHousesRented.value = snapshot.size - totalAvailable;
+      dashboardController.totalHousesRented.value =
+          snapshot.size - totalAvailable;
     } catch (e) {
       e.printError();
     }
