@@ -149,4 +149,51 @@ class PaymentProvider {
         .delete();
     paymentController.lista.remove(payment);
   }
+
+  Future<int> countPaymentsReceivedInCurrentMonth() async {
+    try {
+      final user = Get.find<UserController>();
+      final now = DateTime.now().toUtc();
+      final startOfMonth = DateTime.utc(now.year, now.month, 1);
+      final startOfNextMonth = DateTime.utc(now.year, now.month + 1, 1);
+
+      final snapshot = await db
+          .collection('usuarios/${user.loggedUser.id}/payments')
+          .where('dataPagamento', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfMonth))
+          .where('dataPagamento', isLessThan: Timestamp.fromDate(startOfNextMonth))
+          .get();
+
+      final snapshot2 = await db
+        .collection('usuarios/${user.loggedUser.id}/payments')
+        .where('dataPagamento', isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.utc(now.year, now.month, 1)))
+        .where('dataPagamento', isLessThan: Timestamp.fromDate(DateTime.utc(now.year,now.month + 1 , 1)))
+        .get();
+
+      return snapshot2.size;
+    } catch (e) {
+      e.printError();
+      return 0;
+    }
+  }
+
+  Future<double> countAmoutPaymentsReceivedInCurrentMonth() async {
+    try {
+      final user = Get.find<UserController>();
+      final now = DateTime.now().toUtc();
+      final snapshot2 = await db
+        .collection('usuarios/${user.loggedUser.id}/payments')
+        .where('dataPagamento', isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.utc(now.year, now.month, 1)))
+        .where('dataPagamento', isLessThan: Timestamp.fromDate(DateTime.utc(now.year,now.month + 1 , 1)))
+        .get();
+
+      double totalAmount = 0.0;
+      snapshot2.docs.forEach((doc) {
+        totalAmount += doc.get('valor')?.toDouble() ?? 0.0;
+      });
+      return totalAmount;
+    } catch (e) {
+      e.printError();
+      return 0;
+    }
+  }
 }

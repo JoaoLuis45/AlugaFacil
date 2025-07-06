@@ -1,8 +1,15 @@
+import 'package:aluga_facil/app/Exceptions/invalid_date_aluguel.dart';
 import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/databases/db_firestore.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
+import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/utils/mask_formatters.dart';
+import 'package:aluga_facil/app/utils/normal_date.dart';
+import 'package:aluga_facil/app/utils/showmessage.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HouseProvider {
@@ -92,7 +99,7 @@ class HouseProvider {
       if (snapshot.docs.isNotEmpty) {
         final doc = snapshot.docs.first;
         return HouseModel(
-          dataAluguel: doc.get('dataAluguel'),
+          dataAluguel: (doc.get('dataAluguel') as Timestamp?)?.toDate(),
           fotoCasa: doc.get('fotoCasa'),
           inquilino: doc.get('inquilino'),
           logradouro: doc.get('logradouro'),
@@ -102,7 +109,7 @@ class HouseProvider {
           numeroCasa: doc.get('numeroCasa'),
           valorAluguel: doc.get('valorAluguel'),
         );
-      }else{
+      } else {
         return null;
       }
     } catch (e) {
@@ -111,12 +118,17 @@ class HouseProvider {
     return null;
   }
 
-  Future<void> setInquilino(HouseModel casa) async {
+  Future<dynamic> setInquilino(HouseModel casa) async {
     final user = Get.find<UserController>();
+    DateTime? dataAluguel = await selectDataAluguel();
+    if (dataAluguel == null) {
+      return Future.error(InvalidDateAluguel());
+    }
+    casa.dataAluguel = dataAluguel;
     await db
         .collection('usuarios/${user.loggedUser.id}/imoveis')
         .doc(casa.id.toString())
-        .update({'inquilino': casa.inquilino});
+        .update({'inquilino': casa.inquilino, 'dataAluguel': casa.dataAluguel});
     await read();
   }
 
@@ -125,7 +137,7 @@ class HouseProvider {
     await db
         .collection('usuarios/${user.loggedUser.id}/imoveis')
         .doc(casaId)
-        .update({'inquilino': null});
+        .update({'inquilino': null, 'dataAluguel': null});
     await read();
   }
 
@@ -141,7 +153,7 @@ class HouseProvider {
 
       snapshot.docs.forEach((doc) {
         HouseModel casa = HouseModel(
-          dataAluguel: doc.get('dataAluguel'),
+          dataAluguel: (doc.get('dataAluguel') as Timestamp?)?.toDate(),
           fotoCasa: doc.get('fotoCasa'),
           inquilino: doc.get('inquilino'),
           logradouro: doc.get('logradouro'),
@@ -168,12 +180,13 @@ class HouseProvider {
       houseController.lista.clear();
       final snapshot = await db
           .collection('usuarios/${user.loggedUser.id}/imoveis')
-          .where('numeroCasa', isGreaterThanOrEqualTo: search).where('numeroCasa', isLessThanOrEqualTo: search + '\uf8ff').get();
-
+          .where('numeroCasa', isGreaterThanOrEqualTo: search)
+          .where('numeroCasa', isLessThanOrEqualTo: search + '\uf8ff')
+          .get();
 
       snapshot.docs.forEach((doc) {
         HouseModel casa = HouseModel(
-          dataAluguel: doc.get('dataAluguel'),
+          dataAluguel: (doc.get('dataAluguel') as Timestamp?)?.toDate(),
           fotoCasa: doc.get('fotoCasa'),
           inquilino: doc.get('inquilino'),
           logradouro: doc.get('logradouro'),
@@ -200,5 +213,114 @@ class HouseProvider {
         .delete();
     final houseController = Get.find<HouseController>();
     houseController.lista.remove(casa);
+  }
+
+  Future<DateTime?> selectDataAluguel() async {
+    TextEditingController controller = TextEditingController();
+    DateTime? dataAluguel;
+    await showModalBottomSheet(
+      backgroundColor: brownColorTwo,
+      context: Get.context!,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: brownColorTwo,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(50),
+              topLeft: Radius.circular(50),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+                child: Text(
+                  'Selecione a data do aluguel',
+                  style: TextStyle(fontSize: 22, color: goldColorThree),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+                child: TextFormField(
+                  controller: controller,
+                  inputFormatters: [maskFormatterDate],
+                  onTap: () async {
+                    List<DateTime?>? results =
+                        await showCalendarDatePicker2Dialog(
+                          context: context,
+                          config: CalendarDatePicker2WithActionButtonsConfig(),
+                          dialogSize: const Size(325, 400),
+                          value: [DateTime.now()],
+                          borderRadius: BorderRadius.circular(15),
+                        );
+                    if (results != null && results.isNotEmpty) {
+                      controller.text = formatDate(results.first);
+                      dataAluguel = results.first;
+                      Get.back();
+                    }
+                  },
+                  readOnly: true,
+                  style: const TextStyle(
+                    color: goldColorTwo,
+                    fontFamily: 'Raleway',
+                  ),
+                  decoration: InputDecoration(
+                    fillColor: brownColorTwo,
+                    filled: true,
+                    labelText: 'Data do aluguel',
+                    labelStyle: TextStyle(color: goldColorTwo),
+                    prefixIcon: Icon(Icons.today_outlined, color: goldColorTwo),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide(color: goldColorTwo, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide(color: goldColorTwo, width: 2),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    return dataAluguel;
+  }
+
+    Future<int> getTotalHousesAvailable() async {
+    try {
+      final user = Get.find<UserController>();
+      final snapshot = await db
+          .collection('usuarios/${user.loggedUser.id}/imoveis')
+          .where('inquilino', isEqualTo: null)
+          .get();
+      return snapshot.size;
+    } catch (e) {
+      e.printError();
+      return 0;
+    }
+  }
+
+  Future<int> getTotalHousesRented() async {
+    try {
+      final user = Get.find<UserController>();
+      final snapshot = await db
+          .collection('usuarios/${user.loggedUser.id}/imoveis')
+          .where('inquilino', isNotEqualTo: '')
+          .get();
+      return snapshot.size;
+    } catch (e) {
+      e.printError();
+      return 0;
+    }
   }
 }

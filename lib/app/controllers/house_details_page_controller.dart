@@ -1,7 +1,7 @@
+import 'package:aluga_facil/app/Exceptions/invalid_date_aluguel.dart';
 import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
-import 'package:aluga_facil/app/data/models/payment_model.dart';
 import 'package:aluga_facil/app/data/providers/house_provider.dart';
 import 'package:aluga_facil/app/data/providers/inquilino_provider.dart';
 import 'package:aluga_facil/app/data/providers/payment_provider.dart';
@@ -21,6 +21,7 @@ class HouseDetailsPageController extends GetxController {
   TextEditingController inputBairro = TextEditingController();
   TextEditingController inputCidade = TextEditingController();
   TextEditingController inputvalorAluguel = TextEditingController();
+  TextEditingController inputDataAluguel = TextEditingController();
 
   final InquilinoRepository inquilinoRepository = InquilinoRepository(
     InquilinoProvider(),
@@ -71,6 +72,13 @@ class HouseDetailsPageController extends GetxController {
     inputBairro.text = casa.value.bairro ?? '';
     inputCidade.text = casa.value.cidade ?? '';
     inputvalorAluguel.text = casa.value.valorAluguel?.toString() ?? '';
+    if (casa.value.dataAluguel != null) {
+      inputDataAluguel.text =
+          '${casa.value.dataAluguel!.day.toString()} de todo mês';
+    } else {
+      inputDataAluguel.text = '';
+    }
+    casa.update((a){});
   }
 
   getPayments() async {
@@ -142,21 +150,31 @@ class HouseDetailsPageController extends GetxController {
                         style: TextStyle(color: goldColorThree),
                       ),
                       onTap: () async {
-                        casa.update((val) {
-                          val!.inquilino = inquilino.cpf;
-                        });
-                        inquilino.casaId = casa.value.id;
-                        inquilino.casaNumero = casa.value.numeroCasa;
-                        await inquilinoRepository.setCasa(inquilino);
-                        await getInquilino();
-                        await houseRepository.setInquilino(casa.value);
-                        await getInquilino();
-                        await getPayments();
-                        Get.back();
-                        showMessageBar(
-                          'Sucesso',
-                          'Inquilino vinculado à casa!',
-                        );
+                        try {
+                          casa.value.inquilino = inquilino.cpf;
+                          inquilino.casaId = casa.value.id;
+                          inquilino.casaNumero = casa.value.numeroCasa;
+                          await houseRepository.setInquilino(casa.value);
+                          await inquilinoRepository.setCasa(inquilino);
+                          getDetailsHouse();
+                          await getInquilino();
+                          await getPayments();
+                          Get.back();
+                          showMessageBar(
+                            'Sucesso',
+                            'Inquilino vinculado à casa!',
+                          );
+                        } on InvalidDateAluguel {
+                          showMessageBar(
+                            'Erro',
+                            'Selecione uma data válida para o aluguel.',
+                          );
+                        } catch (e) {
+                          showMessageBar(
+                            'Erro',
+                            'Ocorreu um erro ao vincular inquilino.',
+                          );
+                        }
                       },
                     );
                   },

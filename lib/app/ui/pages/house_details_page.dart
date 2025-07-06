@@ -102,6 +102,18 @@ class HouseDetailsPage extends GetView<HouseDetailsPageController> {
               iconImage: Icons.attach_money_sharp,
               title: 'Valor do Aluguel',
             ),
+            SizedBox(height: 10),
+            Obx(() {
+              return Visibility(
+                visible: controller.casa.value.dataAluguel != null,
+                child: VisualizeTextFormField(
+                  textController: controller.inputDataAluguel,
+                  keyy: 'dataAluguel',
+                  iconImage: Icons.today_outlined,
+                  title: 'Data do Aluguel',
+                ),
+              );
+            }),
             SizedBox(height: 20),
             Obx(() {
               return controller.casa.value.inquilino == null
@@ -179,9 +191,8 @@ class HouseDetailsPage extends GetView<HouseDetailsPageController> {
                                   'Deseja desvincular esse inquilino?',
                                 );
                                 if (result != true) return;
-                                controller.casa.update((val) {
-                                  val!.inquilino = null;
-                                });
+                                controller.casa.value.inquilino = null;
+                                controller.casa.value.dataAluguel = null;
                                 await controller.inquilinoRepository.unsetCasa(
                                   controller.inquilino.value,
                                 );
@@ -189,6 +200,7 @@ class HouseDetailsPage extends GetView<HouseDetailsPageController> {
                                 await controller.houseRepository.unsetInquilino(
                                   controller.casa.value.id!,
                                 );
+                                controller.casa.update((a){});
                                 showMessageBar(
                                   'Sucesso',
                                   'Inquilino desvinculado da casa!',

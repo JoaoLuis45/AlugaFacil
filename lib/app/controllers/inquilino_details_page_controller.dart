@@ -1,3 +1,4 @@
+import 'package:aluga_facil/app/Exceptions/invalid_date_aluguel.dart';
 import 'package:aluga_facil/app/controllers/house_controller.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/models/inquilino_model.dart';
@@ -116,15 +117,22 @@ class InquilinoDetailsPageController extends GetxController {
                         style: TextStyle(color: goldColorThree),
                       ),
                       onTap: () async {
-                        inquilino.update((val) {
+                        try{
+                          inquilino.update((val) {
                           val!.casaId = house.id;
                           val.casaNumero = house.numeroCasa;
                         });
-                        await inquilinoRepository.setCasa(inquilino.value);
                         house.inquilino = inquilino.value.cpf;
                         await houseRepository.setInquilino(house);
+                        await inquilinoRepository.setCasa(inquilino.value);
                         Get.back();
                         showMessageBar('Sucesso', 'Casa vinculada ao inquilino!');
+                        } on InvalidDateAluguel {
+                          showMessageBar('Erro', 'Selecione uma data válida para o aluguel.');
+                        } catch (e) {
+                          showMessageBar('Erro', 'Ocorreu um erro ao vincular a casa.');
+                        }
+                       
                       },
                     );
                   },

@@ -31,4 +31,11 @@ class PaymentRepository {
   Future<void> search(String search) {
     return paymentProvider.search(search);
   }
+
+  Future<int> countPaymentsReceivedInCurrentMonth() {
+    return paymentProvider.countPaymentsReceivedInCurrentMonth();
+  }
+  Future<double> countAmoutPaymentsReceivedInCurrentMonth() {
+    return paymentProvider.countAmoutPaymentsReceivedInCurrentMonth();
+  }
 }
