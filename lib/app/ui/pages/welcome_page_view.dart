@@ -84,15 +84,22 @@ class WelcomePage extends GetView<WelcomePageController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.launcherInBrowser(Uri.parse('https://www.facebook.com'));
+
+                    },
                     icon: Icon(Icons.facebook, color: goldColorThree, size: 40),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.launcherInBrowser(Uri.parse('https://www.instagram.com/joaoluis_ramos/'));
+                    },
                     icon: Icon(Icons.inbox, color: goldColorThree, size: 40),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.launcherInBrowser(Uri.parse('mailto:joaoluisramos45@gmail.com'));
+                    },
                     icon: Icon(Icons.email, color: goldColorThree, size: 40),
                   ),
                 ],

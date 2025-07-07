@@ -72,10 +72,10 @@ class CreatePostController extends GetxController {
       value: double.tryParse(inputValue.text) ?? 0.0,
     );
     await postRepository.setPost(post);
-    showMessageBar('Sucesso!', 'Postagem realizada com sucesso!');
     isLoading = false;
+    Get.back();
+    showMessageBar('Sucesso!', 'Postagem realizada com sucesso!');
 
-     Get.offNamed('/posts');
   }
 
   selectHouse(BuildContext context) {

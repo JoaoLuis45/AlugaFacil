@@ -52,6 +52,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   firebase_database: ^11.3.9
   flutter_toggle_tab: ^1.5.1
+  url_launcher: ^6.3.1
 
 flutter_native_splash:
   color: "#313131"

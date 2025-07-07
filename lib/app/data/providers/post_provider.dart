@@ -129,24 +129,25 @@ class PostProvider {
     hiringController.isLoading.value = true;
     var sellingList = [];
     var hiringList = [];
-    data.forEach((postId, value)  {
+    data.forEach((postId, value)  async{
       final status = value['status'];
       if (status == 'posted') {
         if (value['type'] == 'Vender') {
-          sellingList.add( _sellingHandle(postId, value));
+          sellingList.add( await _sellingHandle(postId, value));
         } else if (value['type'] == 'Alugar') {
-          hiringList.add( _hiringHandle(postId, value));
+          hiringList.add( await _hiringHandle(postId, value));
         }
       }
+      sellingController.lista.assignAll(sellingList);
+      hiringController.lista.assignAll(hiringList);
+      hiringController.isLoading.value = false;
+      sellingController.isLoading.value = false;
       if (status == "error") {
         printError(info: postId);
         printError(info: value['post']);
         printError(info: value['status']);
       }
     });
-    sellingController.lista.assignAll(sellingList);
-    hiringController.lista.assignAll(hiringList);
-    hiringController.isLoading.value = false;
-    sellingController.isLoading.value = false;
+    
   }
 }

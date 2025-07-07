@@ -15,3 +15,9 @@ var maskFormatterDate = MaskTextInputFormatter(
   filter: { "#": RegExp(r'[0-9]') },
   type: MaskAutoCompletionType.lazy
 );
+
+var maskFormatterBRL = MaskTextInputFormatter(
+  mask: 'R\$#.###.###.###,##',
+  filter: { "#": RegExp(r'[0-9]') },
+  type: MaskAutoCompletionType.lazy
+);

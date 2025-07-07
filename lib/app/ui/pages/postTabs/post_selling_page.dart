@@ -37,37 +37,8 @@ class PostSellingPage extends GetView<PostSellingPageController> {
           : Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) {
-                  final Future<PostModel> postFuture = controller.lista[index];
-                  return FutureBuilder<PostModel>(
-                    future: postFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Card(
-                            color: goldColorThree,
-                            elevation: 8,
-                            child: ListTile(
-                              leading: CircularProgressIndicator(),
-                              title: Text('Carregando...'),
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Card(
-                            color: goldColorThree,
-                            elevation: 8,
-                            child: ListTile(
-                              leading: Icon(Icons.error, color: Colors.red),
-                              title: Text('Erro ao carregar postagem'),
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasData) {
-                        final post = snapshot.data!;
-                        return Padding(
+                  final PostModel post = controller.lista[index];
+                  return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Card(
                             color: goldColorThree,
@@ -101,11 +72,6 @@ class PostSellingPage extends GetView<PostSellingPageController> {
                             ),
                           ),
                         );
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    },
-                  );
                 },
                 separatorBuilder: (context, index) => SizedBox(height: 10),
                 itemCount: controller.lista.length,

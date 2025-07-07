@@ -64,6 +64,7 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
                       keyy: 'cpf',
                       maskformatter: [maskFormatterCPF],
                       iconImage: Icons.numbers,
+                      keyboardType: TextInputType.number,
                       isPassword: false,
                       textController: controller.inputCpf,
                       title: 'CPF',
@@ -73,6 +74,7 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
                     InputTextFormField(
                       keyy: 'celular',
                       maskformatter: [maskFormatterNumberPhone],
+                      keyboardType: TextInputType.phone,
                       iconImage: Icons.smartphone,
                       isPassword: false,
                       textController: controller.inputCelular,
@@ -84,6 +86,7 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
                       keyy: 'telefone',
                       maskformatter: [maskFormatterNumberPhone],
                       iconImage: Icons.phone,
+                      keyboardType: TextInputType.phone,
                       isPassword: false,
                       textController: controller.inputTelefone,
                       title: 'Telefone',
