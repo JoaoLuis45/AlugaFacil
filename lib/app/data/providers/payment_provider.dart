@@ -58,9 +58,9 @@ class PaymentProvider {
   }
 
   Future<void> read() async {
+    final paymentController = Get.find<FinanceiroPageController>();
     try {
       final user = Get.find<UserController>();
-      final paymentController = Get.find<FinanceiroPageController>();
       List payments = [];
       paymentController.isLoading.value = true;
       paymentController.lista.clear();
@@ -82,6 +82,7 @@ class PaymentProvider {
       paymentController.isLoading.value = false;
     } catch (e) {
       e.printError();
+      paymentController.isLoading.value = false;
     }
   }
 
@@ -119,9 +120,9 @@ class PaymentProvider {
   }
 
   Future<void> search(String search) async {
+    final paymentController = Get.find<FinanceiroPageController>();
     try {
       final user = Get.find<UserController>();
-      final paymentController = Get.find<FinanceiroPageController>();
       paymentController.isLoading.value = true;
       paymentController.lista.clear();
       final snapshot = await db
@@ -143,6 +144,7 @@ class PaymentProvider {
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
       e.printError();
+      paymentController.isLoading.value = false;
     }
   }
 

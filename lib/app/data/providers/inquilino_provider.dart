@@ -82,9 +82,9 @@ class InquilinoProvider {
   }
 
   Future<void> read() async {
+    final inquilinoController = Get.find<InquilinoPageController>();
     try {
       final user = Get.find<UserController>();
-      final inquilinoController = Get.find<InquilinoPageController>();
       List inquilinos = [];
       inquilinoController.isLoading.value = true;
       inquilinoController.lista.clear();
@@ -109,6 +109,7 @@ class InquilinoProvider {
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
       e.printError();
+      inquilinoController.isLoading.value = false;
     }
   }
 
@@ -144,9 +145,9 @@ class InquilinoProvider {
   }
 
   Future<void> search(String search) async {
+    final inquilinoController = Get.find<InquilinoPageController>();
     try {
       final user = Get.find<UserController>();
-      final inquilinoController = Get.find<InquilinoPageController>();
       inquilinoController.isLoading.value = true;
       inquilinoController.lista.clear();
       final snapshot = await db
@@ -169,6 +170,7 @@ class InquilinoProvider {
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
       e.printError();
+      inquilinoController.isLoading.value = false;
     }
   }
 

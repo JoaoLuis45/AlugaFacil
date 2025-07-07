@@ -142,9 +142,9 @@ class HouseProvider {
   }
 
   Future<void> read() async {
+    final houseController = Get.find<HouseController>();
     try {
       final user = Get.find<UserController>();
-      final houseController = Get.find<HouseController>();
       List casas = [];
       houseController.isLoading.value = true;
       houseController.lista.clear();
@@ -171,13 +171,14 @@ class HouseProvider {
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
       e.printError();
+      houseController.isLoading.value = false;
     }
   }
 
   Future<void> search(String search) async {
+      final houseController = Get.find<HouseController>();
     try {
       final user = Get.find<UserController>();
-      final houseController = Get.find<HouseController>();
       houseController.isLoading.value = true;
       houseController.lista.clear();
       final snapshot = await db
@@ -204,6 +205,7 @@ class HouseProvider {
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
       e.printError();
+      houseController.isLoading.value = false;
     }
   }
 
