@@ -59,40 +59,43 @@ class PostDetailsPage extends GetView<PostDetailsPageController> {
               ),
             ),
             Obx(() {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Center(
-                  child: FlutterToggleTab(
-                    width: 90, // width in percent
-                    borderRadius: 10,
-                    height: 35,
-                    selectedIndex: controller.tabIndex.value,
-                    selectedBackgroundColors: [goldColorThree, goldColorTwo],
-                    selectedTextStyle: TextStyle(
-                      color: goldToBrownColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              return Visibility(
+                visible: controller.post.value.userId == controller.userController.loggedUser.id,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: FlutterToggleTab(
+                      width: 90, // width in percent
+                      borderRadius: 10,
+                      height: 35,
+                      selectedIndex: controller.tabIndex.value,
+                      selectedBackgroundColors: [goldColorThree, goldColorTwo],
+                      selectedTextStyle: TextStyle(
+                        color: goldToBrownColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      unSelectedTextStyle: TextStyle(
+                        color: brownColorTwo,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      dataTabs: controller.listTabs,
+                      selectedLabelIndex: (index) async {
+                        controller.tabIndex.value = index;
+                        if(index != 0){
+                          final result = await showDialogMessage(
+                          context,
+                          'Tem ceteza?',
+                          'A postagem sairá de circulação, deseja continuar ?',
+                        );
+                        if (result != true) return;
+                        controller.alterStatusPost();   
+                        }
+                        
+                      },
+                      isScroll: false,
                     ),
-                    unSelectedTextStyle: TextStyle(
-                      color: brownColorTwo,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    dataTabs: controller.listTabs,
-                    selectedLabelIndex: (index) async {
-                      controller.tabIndex.value = index;
-                      if(index != 0){
-                        final result = await showDialogMessage(
-                        context,
-                        'Tem ceteza?',
-                        'A postagem sairá de circulação, deseja continuar ?',
-                      );
-                      if (result != true) return;
-                      controller.alterStatusPost();   
-                      }
-                      
-                    },
-                    isScroll: false,
                   ),
                 ),
               );

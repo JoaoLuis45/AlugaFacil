@@ -100,7 +100,7 @@ class CreateInquilinoPageController extends GetxController {
     isLoading = false;
 
     inquilinoRepository.read();
-    Get.toNamed('/home');
+    Get.offAllNamed('/home');
   }
 }
 

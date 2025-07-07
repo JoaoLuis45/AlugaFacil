@@ -1,3 +1,4 @@
+import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/models/post_model.dart';
 import 'package:aluga_facil/app/data/providers/post_provider.dart';
 import 'package:aluga_facil/app/data/repositories/post_repository.dart';
@@ -19,6 +20,7 @@ class PostDetailsPageController extends GetxController {
   final tabIndex = 0.obs;
 
   final PostRepository postRepository = PostRepository(PostProvider());
+  final userController = Get.find<UserController>();
 
   final post = PostModel().obs;
 

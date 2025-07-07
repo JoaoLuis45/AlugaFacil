@@ -37,6 +37,12 @@ class CreateHousePageController extends GetxController {
     editHouse();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<CreateHousePageController>();
+  }
+
   // DateTime? dataAluguel;
 
   editHouse() {
@@ -105,7 +111,7 @@ class CreateHousePageController extends GetxController {
     isLoading = false;
 
     houseRepository.read();
-    Get.toNamed('/home');
+    Get.offAllNamed('/home');
   }
 
   _uploadImage() async {

@@ -83,10 +83,12 @@ class PostProvider {
                 ? DateTime.tryParse(v['postDate'])
                 : null,
             situation: v['situation'],
+            userId: v['userId'],
             valor: double.tryParse(v['valor'].toString()) ?? 0.0,
             observations: v['observations'],
           );
           post.id = postId;
+          post.userId = v['userId'];
           return post;
         }
       }
@@ -122,10 +124,12 @@ class PostProvider {
                 ? DateTime.tryParse(v['postDate'])
                 : null,
             situation: v['situation'],
+            userId: v['userId'],
             valor: double.tryParse(v['valor'].toString()) ?? 0.0,
             observations: v['observations'],
           );
           post.id = postId;
+          post.userId = v['userId'];
           return post;
         }
       }
