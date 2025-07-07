@@ -67,8 +67,8 @@ class PostProvider {
                 ? DateTime.tryParse(v['postDate'])
                 : null,
             situation: v['situation'],
-            value: double.tryParse(v['value'].toString()) ?? 0.0,
-            obs: v['obs'],
+            valor: double.tryParse(v['valor'].toString()) ?? 0.0,
+            observations: v['observations'],
           );
           post.id = postId;
           return post;
@@ -106,8 +106,8 @@ class PostProvider {
                 ? DateTime.tryParse(v['postDate'])
                 : null,
             situation: v['situation'],
-            value: double.tryParse(v['value'].toString()) ?? 0.0,
-            obs: v['obs'],
+            valor: double.tryParse(v['valor'].toString()) ?? 0.0,
+            observations: v['observations'],
           );
           post.id = postId;
           return post;

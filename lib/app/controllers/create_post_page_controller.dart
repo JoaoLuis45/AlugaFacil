@@ -67,9 +67,9 @@ class CreatePostController extends GetxController {
     PostModel post = PostModel(
       house: casa.value,
       contact: inputContact.text,
-      obs: inputObs.text,
+      observations: inputObs.text,
       situation: inputSituation.text,
-      value: double.tryParse(inputValue.text) ?? 0.0,
+      valor: double.tryParse(inputValue.text) ?? 0.0,
     );
     await postRepository.setPost(post);
     isLoading = false;

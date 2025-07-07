@@ -1,4 +1,6 @@
 import 'package:aluga_facil/app/controllers/post_details_page_controller.dart';
+import 'package:aluga_facil/app/ui/themes/app_colors.dart';
+import 'package:aluga_facil/app/ui/widgets/visualize_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +9,136 @@ class PostDetailsPage extends GetView<PostDetailsPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: goldColorThree),
+        centerTitle: true,
+        title: Text(
+          'Detalhes da Postagem',
+          style: TextStyle(color: goldColorThree),
+        ),
+        backgroundColor: brownColorOne,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          children: [
+            SizedBox(height: 30),
+            Center(
+              child: Hero(
+                tag: controller.post.value,
+                child: Obx(() {
+                  return controller.post.value.house!.fotoCasa == null ||
+                          controller.post.value.house!.fotoCasa == ''
+                      ? CircleAvatar(
+                          radius: 82,
+                          backgroundColor: goldColorTwo,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundColor: brownColorTwo,
+                            child: Icon(
+                              Icons.photo_size_select_actual_outlined,
+                              color: goldColorThree,
+                              size: 100,
+                            ),
+                          ),
+                        )
+                      : CircleAvatar(
+                          radius: 82,
+                          backgroundColor: goldColorTwo,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: NetworkImage(
+                              controller.post.value.house!.fotoCasa!,
+                            ),
+                          ),
+                        );
+                }),
+              ),
+            ),
+            SizedBox(height: 30),
+            Obx(() {
+              return Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Imóvel Vinculado',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: brownColorTwo,
+                      ),
+                    ),
+                  ),
+                  Card(
+                    elevation: 8,
+                    color: brownColorOne,
+                    child: ListTile(
+                      leading: Icon(Icons.person, color: goldColorThree),
+                      title: Text(
+                        '${controller.post.value.house!.numeroCasa} - ${controller.post.value.house!.bairro}',
+                        style: TextStyle(
+                          color: goldColorThree,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${controller.post.value.house!.logradouro} - ${controller.post.value.house!.cidade}',
+                        style: TextStyle(color: goldColorTwo, fontSize: 16),
+                      ),
+                      onTap: () {
+                        Get.offNamed(
+                          '/detailsHouse',
+                          arguments: controller.post.value.house,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }),
+            SizedBox(height: 20),
+            VisualizeTextFormField(
+              textController: controller.inputSituation,
+              keyy: 'situation',
+              iconImage: Icons.post_add,
+              title: 'Situação',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputValue,
+              keyy: 'valor',
+              iconImage: Icons.monetization_on,
+              title: 'Valor',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputPostDate,
+              keyy: 'postDate',
+              iconImage: Icons.today_outlined,
+              title: 'Data da Postagem',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputContact,
+              keyy: 'contact',
+              iconImage: Icons.smartphone,
+              title: 'Contato',
+            ),
+            SizedBox(height: 10),
+            VisualizeTextFormField(
+              textController: controller.inputObs,
+              keyy: 'obs',
+              iconImage: Icons.notes_outlined,
+              title: 'Observações',
+            ),
+
+            SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 }

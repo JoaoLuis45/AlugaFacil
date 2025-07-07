@@ -5,26 +5,26 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class PostModel {
-  final HouseModel house;
+  HouseModel? house;
   DateTime? postDate;
-  final String situation;
+  String? situation;
   String? id;
   String? userId;
-  final String contact;
-  final String obs;
-  final double value;
+  String? contact;
+  String? observations;
+  double? valor;
 
   final userController = Get.find<UserController>();
 
   PostModel({
-    required this.house,
+    this.house,
     DateTime? postDate,
     String? id,
     String? userId,
-    required this.situation,
-    required this.contact,
-    required this.obs,
-    required this.value,
+    this.situation,
+    this.contact,
+    this.observations,
+    this.valor,
   })  : postDate = postDate ?? DateTime.now(),
         id = id ?? const Uuid().v4() {
     this.userId = userId ?? userController.loggedUser.id;
@@ -42,23 +42,23 @@ class PostModel {
       userId: json['userId'] as String?,
       situation: json['situation'] as String,
       contact: json['contact'] as String,
-      obs: json['obs'] as String,
-      value: (json['value'] is int)
-          ? (json['value'] as int).toDouble()
-          : (json['value'] as double),
+      observations: json['observations'] as String,
+      valor: (json['valor'] is int)
+          ? (json['valor'] as int).toDouble()
+          : (json['valor'] as double),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'house': house.toJson(),
+      'house': house!.toJson(),
       'postDate': postDate?.toIso8601String(),
       'id': id,
       'userId': userId,
       'situation': situation,
       'contact': contact,
-      'obs': obs,
-      'value': value,
+      'observations': observations,
+      'valor': valor,
     };
   }
 }

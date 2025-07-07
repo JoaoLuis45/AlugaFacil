@@ -46,12 +46,12 @@ class PostSellingPage extends GetView<PostSellingPageController> {
                             child: ListTile(
                               leading: Hero(
                                 tag: post,
-                                child: post.house.fotoCasa != null &&
-                                        post.house.fotoCasa != ''
+                                child: post.house!.fotoCasa != null &&
+                                        post.house!.fotoCasa != ''
                                     ? CircleAvatar(
                                         radius: 32,
                                         backgroundImage: NetworkImage(
-                                          post.house.fotoCasa!,
+                                          post.house!.fotoCasa!,
                                         ),
                                       )
                                     : Icon(
@@ -61,13 +61,13 @@ class PostSellingPage extends GetView<PostSellingPageController> {
                                       ),
                               ),
                               title: Text(
-                                '${post.situation}: ${post.house.numeroCasa} - ${post.house.logradouro}',
+                                '${post.situation}: ${post.house!.numeroCasa} - ${post.house!.logradouro}',
                               ),
                               subtitle: Text(
-                                '${post.contact} | ${formatDate(post.postDate)} | R\$${post.value}',
+                                '${post.contact} | ${formatDate(post.postDate)} | R\$${post.valor}',
                               ),
                               onTap: () {
-                                // Get.toNamed('/detailsHouse', arguments: casa);
+                                 Get.toNamed('/detailsPosts', arguments: post);
                               },
                             ),
                           ),

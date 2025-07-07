@@ -7,6 +7,7 @@ import 'package:aluga_facil/app/bindings/house_details_page_binding.dart';
 import 'package:aluga_facil/app/bindings/inquilino_details_page_binding.dart';
 import 'package:aluga_facil/app/bindings/login_page_binding.dart';
 import 'package:aluga_facil/app/bindings/payment_details_page_binding.dart';
+import 'package:aluga_facil/app/bindings/post_details_page_binding.dart';
 import 'package:aluga_facil/app/bindings/post_page_binding.dart';
 import 'package:aluga_facil/app/bindings/signup_page_binding.dart';
 import 'package:aluga_facil/app/bindings/welcome_page_binding.dart';
@@ -17,6 +18,7 @@ import 'package:aluga_facil/app/ui/pages/create_post_page.dart';
 import 'package:aluga_facil/app/ui/pages/house_details_page.dart';
 import 'package:aluga_facil/app/ui/pages/inquilino_details_page.dart';
 import 'package:aluga_facil/app/ui/pages/payment_details_page.dart';
+import 'package:aluga_facil/app/ui/pages/post_details_page.dart';
 import 'package:aluga_facil/app/ui/pages/post_page.dart';
 import 'package:aluga_facil/app/ui/pages/signup_page_view.dart';
 import 'package:aluga_facil/app/ui/pages/home_page.dart';
@@ -37,4 +39,5 @@ final routes = [
   GetPage(name: '/detailsPayment', page: () => PaymentDetailsPage(), binding: PaymentDetailsPageBinding()),
   GetPage(name: '/createPost', page: () => CreatePostPage(), binding: CreatePostBinding()),
   GetPage(name: '/posts', page: () => PostPage(), binding: PostPageBinding()),
+  GetPage(name: '/detailsPosts', page: () => PostDetailsPage(), binding: PostDetailsPageBinding()),
 ];
