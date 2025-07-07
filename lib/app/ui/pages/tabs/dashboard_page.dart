@@ -221,6 +221,7 @@ class DashboardPage extends GetView<DashboardPageController> {
                 series: <LineSeries<dynamic, String>>[
                   LineSeries<dynamic, String>(
                     name: 'Quantidade de Pagamentos',
+                    // ignore: invalid_use_of_protected_member
                     dataSource: controller.listPaymentsData.value,
                     xValueMapper: (dynamic sales, _) => sales.month,
                     yValueMapper: (dynamic sales, _) => sales.amount,
@@ -271,6 +272,7 @@ class DashboardPage extends GetView<DashboardPageController> {
                     tooltipBehavior: controller.tooltipBehavior,
                     series: [
                       PieSeries<dynamic, String>(
+                        // ignore: invalid_use_of_protected_member
                         dataSource: controller.listPaymentsTypeData.value,
                         xValueMapper: (dynamic data, _) => data.type,
                         yValueMapper: (dynamic data, _) => data.amount,

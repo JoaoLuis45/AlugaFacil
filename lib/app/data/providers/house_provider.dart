@@ -7,7 +7,6 @@ import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/utils/mask_formatters.dart';
 import 'package:aluga_facil/app/utils/normal_date.dart';
-import 'package:aluga_facil/app/utils/showmessage.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +152,7 @@ class HouseProvider {
           .collection('usuarios/${user.loggedUser.id}/imoveis')
           .get();
 
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         HouseModel casa = HouseModel(
           dataAluguel: (doc.get('dataAluguel') as Timestamp?)?.toDate(),
           fotoCasa: doc.get('fotoCasa'),
@@ -166,7 +165,7 @@ class HouseProvider {
           valorAluguel: doc.get('valorAluguel'),
         );
         casas.add(casa);
-      });
+      }
       houseController.lista.assignAll(casas);
       houseController.isLoading.value = false;
     } catch (e) {
@@ -184,10 +183,10 @@ class HouseProvider {
       final snapshot = await db
           .collection('usuarios/${user.loggedUser.id}/imoveis')
           .where('numeroCasa', isGreaterThanOrEqualTo: search)
-          .where('numeroCasa', isLessThanOrEqualTo: search + '\uf8ff')
+          .where('numeroCasa', isLessThanOrEqualTo: '$search\uf8ff')
           .get();
 
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         HouseModel casa = HouseModel(
           dataAluguel: (doc.get('dataAluguel') as Timestamp?)?.toDate(),
           fotoCasa: doc.get('fotoCasa'),
@@ -200,7 +199,7 @@ class HouseProvider {
           valorAluguel: doc.get('valorAluguel'),
         );
         houseController.lista.add(casa);
-      });
+      }
       houseController.isLoading.value = false;
     } catch (e) {
       //showMessageBar('Erro!', e.toString());

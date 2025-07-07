@@ -1,6 +1,5 @@
 import 'package:aluga_facil/app/controllers/dashboard_page_controller.dart';
 import 'package:aluga_facil/app/controllers/financeiro_page_controller.dart';
-import 'package:aluga_facil/app/controllers/inquilino_page_controller.dart';
 import 'package:aluga_facil/app/controllers/user_controller.dart';
 import 'package:aluga_facil/app/data/databases/db_firestore.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
@@ -8,8 +7,6 @@ import 'package:aluga_facil/app/data/models/inquilino_model.dart';
 import 'package:aluga_facil/app/data/models/payment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/get_utils.dart';
-import 'package:get/instance_manager.dart';
 
 class PaymentProvider {
   late FirebaseFirestore db;
@@ -70,7 +67,7 @@ class PaymentProvider {
       final snapshot = await db
           .collection('usuarios/${user.loggedUser.id}/payments')
           .get();
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         PaymentModel payment = PaymentModel(
           casaId: doc.get('casaId'),
           dataPagamento: (doc.get('dataPagamento') as Timestamp).toDate(),
@@ -80,7 +77,7 @@ class PaymentProvider {
           valor: doc.get('valor'),
         );
         payments.add(payment);
-      });
+      }
       paymentController.lista.assignAll(payments);
       paymentController.isLoading.value = false;
     } catch (e) {
@@ -102,7 +99,7 @@ class PaymentProvider {
 
       List<PaymentModel> paymentList = [];
 
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         PaymentModel payment = PaymentModel(
           casaId: doc.get('casaId'),
           dataPagamento: (doc.get('dataPagamento') as Timestamp).toDate(),
@@ -112,7 +109,7 @@ class PaymentProvider {
           valor: doc.get('valor'),
         );
         paymentList.add(payment);
-      });
+      }
 
       return paymentList;
     } catch (e) {
@@ -131,7 +128,7 @@ class PaymentProvider {
           .collection('usuarios/${user.loggedUser.id}/payments')
           .where('valor', isGreaterThanOrEqualTo: int.tryParse(search))
           .get();
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         PaymentModel payment = PaymentModel(
           casaId: doc.get('casaId'),
           dataPagamento: (doc.get('dataPagamento') as Timestamp).toDate(),
@@ -141,7 +138,7 @@ class PaymentProvider {
           valor: doc.get('valor'),
         );
         paymentController.lista.add(payment);
-      });
+      }
       paymentController.isLoading.value = false;
     } catch (e) {
       //showMessageBar('Erro!', e.toString());
@@ -181,9 +178,9 @@ class PaymentProvider {
           .get();
 
       double totalAmount = 0.0;
-      snapshot2.docs.forEach((doc) {
+      for (var doc in snapshot2.docs) {
         totalAmount += doc.get('valor')?.toDouble() ?? 0.0;
-      });
+      }
       dashboardController.totalPaymentsReceivedAmout.value = totalAmount;
       dashboardController.totalPaymentsReceivedNumber.value =
           snapshot2.docs.length;

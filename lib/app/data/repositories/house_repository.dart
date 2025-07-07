@@ -1,4 +1,3 @@
-import 'package:aluga_facil/app/Exceptions/invalid_date_aluguel.dart';
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/providers/house_provider.dart';
 

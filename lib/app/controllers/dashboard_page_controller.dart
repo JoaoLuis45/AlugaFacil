@@ -4,7 +4,6 @@ import 'package:aluga_facil/app/data/providers/payment_provider.dart';
 import 'package:aluga_facil/app/data/repositories/house_repository.dart';
 import 'package:aluga_facil/app/data/repositories/inquilino_repository.dart';
 import 'package:aluga_facil/app/data/repositories/payment_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

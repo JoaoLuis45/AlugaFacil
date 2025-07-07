@@ -7,7 +7,7 @@ import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/ui/widgets/fade_indexed_stack.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
@@ -82,7 +82,9 @@ class HomePage extends GetView<HomePageController> {
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         backgroundColor: brownColorTwo,
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed('/posts');
+        },
         child: Icon(Icons.add_home_work_sharp, color: goldColorThree, size: 32),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
