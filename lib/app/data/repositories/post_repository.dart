@@ -10,6 +10,10 @@ class PostRepository {
     return postProvider.setPost(post);
   }
 
+  Future<void> alterStatusPost(PostModel post,status) {
+    return postProvider.alterStatusPost(post,status);
+  }
+
   void handle(event) {
     return postProvider.handle(event);
   }

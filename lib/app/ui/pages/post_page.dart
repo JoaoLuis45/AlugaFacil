@@ -23,7 +23,7 @@ class PostPage extends GetView<PostPageController> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: brownColorOne,
+        backgroundColor: brownColorTwo,
         actions: [
           IconButton(
             onPressed: () {
@@ -67,7 +67,7 @@ class PostPage extends GetView<PostPageController> {
           }),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: PageView(
                 controller: controller.pageController,
                 onPageChanged: (index) {

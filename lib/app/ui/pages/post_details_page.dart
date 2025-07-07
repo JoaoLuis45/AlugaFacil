@@ -1,7 +1,9 @@
 import 'package:aluga_facil/app/controllers/post_details_page_controller.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/ui/widgets/visualize_form_field.dart';
+import 'package:aluga_facil/app/utils/show_dialog_message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:get/get.dart';
 
 class PostDetailsPage extends GetView<PostDetailsPageController> {
@@ -56,7 +58,45 @@ class PostDetailsPage extends GetView<PostDetailsPageController> {
                 }),
               ),
             ),
-            SizedBox(height: 30),
+            Obx(() {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Center(
+                  child: FlutterToggleTab(
+                    width: 90, // width in percent
+                    borderRadius: 10,
+                    height: 35,
+                    selectedIndex: controller.tabIndex.value,
+                    selectedBackgroundColors: [goldColorThree, goldColorTwo],
+                    selectedTextStyle: TextStyle(
+                      color: goldToBrownColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    unSelectedTextStyle: TextStyle(
+                      color: brownColorTwo,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    dataTabs: controller.listTabs,
+                    selectedLabelIndex: (index) async {
+                      controller.tabIndex.value = index;
+                      if(index != 0){
+                        final result = await showDialogMessage(
+                        context,
+                        'Tem ceteza?',
+                        'A postagem sairá de circulação, deseja continuar ?',
+                      );
+                      if (result != true) return;
+                      controller.alterStatusPost();   
+                      }
+                      
+                    },
+                    isScroll: false,
+                  ),
+                ),
+              );
+            }),
             Obx(() {
               return Column(
                 children: [

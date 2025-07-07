@@ -41,6 +41,22 @@ class PostProvider {
         );
   }
 
+  Future<void> alterStatusPost(PostModel post,status) async {
+    await db
+        .ref("posts/${post.id}")
+        .set({
+          "post": post.toJson(),
+          "status": status,
+          "type": post.situation,
+        })
+        .onError((error, stackTrace) => {})
+        .timeout(
+          30.seconds,
+          onTimeout: () {
+          },
+        );
+  }
+
   Future<PostModel> _sellingHandle(postId, value) async {
     final status = value['status'];
     try {
