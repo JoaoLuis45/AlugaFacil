@@ -297,7 +297,8 @@ class DashboardPage extends GetView<DashboardPageController> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Expanded(
+            child: SizedBox(
+              width: Get.width * 0.4,
               child: Card(
                 elevation: 8,
                 color: brownColorTwo,
@@ -376,7 +377,8 @@ class DashboardPage extends GetView<DashboardPageController> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Expanded(
+            child: SizedBox(
+              width: Get.width * 0.4,
               child: Card(
                 elevation: 8,
                 color: goldColorThree,

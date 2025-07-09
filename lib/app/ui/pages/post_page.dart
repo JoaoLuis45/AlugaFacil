@@ -33,51 +33,58 @@ class PostPage extends GetView<PostPageController> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Obx(() {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Center(
-                child: FlutterToggleTab(
-                  width: 90, // width in percent
-                  borderRadius: 30,
-                  height: 50,
-                  selectedIndex: controller.pageIndex.value,
-                  selectedBackgroundColors: [goldColorThree, goldColorTwo],
-                  selectedTextStyle: TextStyle(
-                    color: goldToBrownColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: Get.height
+          ),
+          child: Column(
+            children: [
+              Obx(() {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: FlutterToggleTab(
+                      width: 90, // width in percent
+                      borderRadius: 30,
+                      height: 50,
+                      selectedIndex: controller.pageIndex.value,
+                      selectedBackgroundColors: [goldColorThree, goldColorTwo],
+                      selectedTextStyle: TextStyle(
+                        color: goldToBrownColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      unSelectedTextStyle: TextStyle(
+                        color: brownColorTwo,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      dataTabs: controller.listTabs,
+                      selectedLabelIndex: (index) {
+                        controller.pageIndex.value = index;
+                        controller.pageController.jumpToPage(index);
+                      },
+                      isScroll: false,
+                    ),
                   ),
-                  unSelectedTextStyle: TextStyle(
-                    color: brownColorTwo,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                );
+              }),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: PageView(
+                    controller: controller.pageController,
+                    onPageChanged: (index) {
+                      controller.pageIndex.value = index;
+                    },
+                    children: [PostSellingPage(), PostHiringPage()],
                   ),
-                  dataTabs: controller.listTabs,
-                  selectedLabelIndex: (index) {
-                    controller.pageIndex.value = index;
-                    controller.pageController.jumpToPage(index);
-                  },
-                  isScroll: false,
                 ),
               ),
-            );
-          }),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: PageView(
-                controller: controller.pageController,
-                onPageChanged: (index) {
-                  controller.pageIndex.value = index;
-                },
-                children: [PostSellingPage(), PostHiringPage()],
-              ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
