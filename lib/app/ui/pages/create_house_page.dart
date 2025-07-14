@@ -2,6 +2,9 @@ import 'package:aluga_facil/app/controllers/create_house_page_controller.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/ui/widgets/controllers/input_form_field_controller.dart';
 import 'package:aluga_facil/app/ui/widgets/input_form_field.dart';
+import 'package:aluga_facil/app/utils/mask_formatters.dart';
+import 'package:aluga_facil/app/utils/normal_date.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
@@ -16,10 +19,14 @@ class CreateHousePage extends GetView<CreateHousePageController> {
         appBar: AppBar(
           backgroundColor: brownColorTwo,
           iconTheme: IconThemeData(color: goldColorThree),
-          title: Text(
-            'Criar um novo imóvel',
-            style: TextStyle(fontSize: 20, color: goldColorThree),
-          ),
+          title: Obx(() {
+            return Text(
+              controller.isEditing.value
+                  ? 'Editar Este Imóvel'
+                  : 'Criar um novo imóvel',
+              style: TextStyle(fontSize: 20, color: goldColorThree),
+            );
+          }),
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -148,6 +155,68 @@ class CreateHousePage extends GetView<CreateHousePageController> {
                       title: 'Valor do Aluguel',
                       controller: InputFormFieldController(),
                     ),
+                    Spacer(flex: 2),
+                    Obx(() {
+                      return Visibility(
+                        visible:
+                            controller.isEditing.value &&
+                            controller.casa.value.dataAluguel != null,
+                        child: TextFormField(
+                          controller: controller.inputDataLuguel,
+                          inputFormatters: [maskFormatterDate],
+                          onTap: () async {
+                            DateTime? dataAluguel;
+                            List<DateTime?>?
+                            results = await showCalendarDatePicker2Dialog(
+                              context: context,
+                              config:
+                                  CalendarDatePicker2WithActionButtonsConfig(),
+                              dialogSize: const Size(325, 400),
+                              value: [DateTime.now()],
+                              borderRadius: BorderRadius.circular(15),
+                            );
+                            if (results != null && results.isNotEmpty) {
+                              dataAluguel = results.first;
+                            }
+
+                            if (dataAluguel != null) {
+                              controller.inputDataLuguel.text =
+                                  formatDate(dataAluguel) ?? '';
+                              controller.dataAluguel = dataAluguel;
+                            }
+                          },
+                          readOnly: true,
+                          style: const TextStyle(
+                            color: goldColorTwo,
+                            fontFamily: 'Raleway',
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: brownColorTwo,
+                            filled: true,
+                            labelText: 'Data do Aluguel',
+                            labelStyle: TextStyle(color: goldColorTwo),
+                            prefixIcon: Icon(
+                              Icons.today_outlined,
+                              color: goldColorTwo,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(
+                                color: goldColorTwo,
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(
+                                color: goldColorTwo,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     Spacer(flex: 5),
                     Container(
                       width: double.infinity,

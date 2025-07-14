@@ -20,10 +20,14 @@ class CreateInquilinoPage extends GetView<CreateInquilinoPageController> {
         appBar: AppBar(
           backgroundColor: brownColorTwo,
           iconTheme: IconThemeData(color: goldColorThree),
-          title: Text(
-            'Cadastrar um novo inquilino',
-            style: TextStyle(fontSize: 20, color: goldColorThree),
-          ),
+          title: Obx(() {
+            return Text(
+              controller.isEditing.value
+                  ? 'Editar Inquilino'
+                  : 'Cadastrar Inquilino',
+              style: TextStyle(fontSize: 20, color: goldColorThree),
+            );
+          }),
         ),
         body: Container(
           decoration: BoxDecoration(

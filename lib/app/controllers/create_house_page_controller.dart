@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aluga_facil/app/data/models/house_model.dart';
 import 'package:aluga_facil/app/data/repositories/house_repository.dart';
+import 'package:aluga_facil/app/utils/normal_date.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
@@ -16,6 +17,7 @@ class CreateHousePageController extends GetxController {
   TextEditingController inputBairro = TextEditingController();
   TextEditingController inputCidade = TextEditingController();
   TextEditingController inputvalorAluguel = TextEditingController();
+  TextEditingController inputDataLuguel = TextEditingController();
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
@@ -26,6 +28,7 @@ class CreateHousePageController extends GetxController {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   final fotoCasa = ''.obs;
+  DateTime? dataAluguel;
   final isLoadingfotoCasa = false.obs;
   final isEditing = false.obs;
   final casa = HouseModel().obs;
@@ -52,6 +55,8 @@ class CreateHousePageController extends GetxController {
       inputLogradouro.text = casa.value.logradouro ?? '';
       inputBairro.text = casa.value.bairro ?? '';
       inputCidade.text = casa.value.cidade ?? '';
+      inputDataLuguel.text = casa.value.dataAluguel != null ? formatDate(casa.value.dataAluguel) : '';
+      dataAluguel = casa.value.dataAluguel;
       inputvalorAluguel.text = casa.value.valorAluguel?.toString() ?? '';
       fotoCasa.value = casa.value.fotoCasa ?? '';
       isEditing.value = true;
@@ -92,6 +97,7 @@ class CreateHousePageController extends GetxController {
       casa.value.bairro = inputBairro.text;
       casa.value.cidade = inputCidade.text;
       casa.value.fotoCasa = fotoCasa.value;
+      casa.value.dataAluguel = dataAluguel;
       casa.value.valorAluguel = double.tryParse(inputvalorAluguel.text) ?? 0.0;
 
       await houseRepository.update(casa.value);

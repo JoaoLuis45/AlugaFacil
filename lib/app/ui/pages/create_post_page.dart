@@ -59,7 +59,8 @@ class CreatePostPage extends GetView<CreatePostController> {
                     ),
                   ),
                   child: Obx(() {
-                    return controller.casa.value.fotoCasa == null ||controller.casa.value.fotoCasa == ''
+                    return controller.casa.value.fotoCasa == null ||
+                            controller.casa.value.fotoCasa == ''
                         ? Icon(
                             Icons.house_rounded,
                             size: 50,
@@ -216,7 +217,7 @@ class CreatePostPage extends GetView<CreatePostController> {
                     );
                   }),
                 ),
-                Spacer(flex: 18),
+                SizedBox(height: 40),
               ],
             ),
           ),
