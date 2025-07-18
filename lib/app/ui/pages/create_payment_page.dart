@@ -20,10 +20,14 @@ class CreatePaymentPage extends GetView<CreatePaymentPageController> {
         appBar: AppBar(
           backgroundColor: brownColorTwo,
           iconTheme: IconThemeData(color: goldColorThree),
-          title: Text(
-            'Criar Pagamento',
-            style: TextStyle(fontSize: 20, color: goldColorThree),
-          ),
+          title: Obx(() {
+            return Text(
+              controller.isEditing.value
+                  ? 'Editar Pagamento'
+                  : 'Criar Pagamento',
+              style: TextStyle(fontSize: 20, color: goldColorThree),
+            );
+          }),
         ),
         body: Container(
           decoration: BoxDecoration(

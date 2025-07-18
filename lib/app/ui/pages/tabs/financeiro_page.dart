@@ -167,17 +167,14 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
                                                 color: brownColorTwo,
                                               ),
                                             ),
+                                            controller.isPaymentLoading.value ?
+                                            CircularProgressIndicator(color: brownColorTwo,):
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () async{
+                                                await controller.generateReceipt(payment);
+                                              },
                                               icon: Icon(
                                                 Icons.share,
-                                                color: brownColorTwo,
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons.monetization_on_rounded,
                                                 color: brownColorTwo,
                                               ),
                                             ),

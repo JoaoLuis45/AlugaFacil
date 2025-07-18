@@ -53,6 +53,8 @@ dependencies:
   firebase_database: ^11.3.9
   flutter_toggle_tab: ^1.5.1
   url_launcher: ^6.3.1
+  receipt_generator: ^0.0.5
+  open_file: ^3.5.10  
 
 flutter_native_splash:
   color: "#313131"

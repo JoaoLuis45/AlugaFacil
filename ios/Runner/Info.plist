@@ -34,6 +34,10 @@
 	<string>Main</string>
 	<key>UIStatusBarHidden</key>
 	<false/>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Precisamos de acesso à biblioteca de arquivos para salvar e abrir o recibo PDF.</string>
+		<key>NSDocumentsFolderUsageDescription</key>
+		<string>Usado para salvar o recibo PDF gerado.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

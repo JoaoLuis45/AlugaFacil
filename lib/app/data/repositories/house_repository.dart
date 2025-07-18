@@ -22,6 +22,10 @@ class HouseRepository {
     return houseProvider.setInquilino(casa);
   }
 
+  Future<DateTime?> setDataAluguel() {
+    return houseProvider.selectDataAluguel();
+  }
+
   Future<void> unsetInquilino(String casaId) {
     return houseProvider.unsetInquilino(casaId);
   }
