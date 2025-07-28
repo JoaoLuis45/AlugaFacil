@@ -40,6 +40,14 @@ abstract class FlutterFireAuth {
       );
   }
 
+  Future<void> deleteAccount() async {
+    try{
+      await _auth.currentUser!.delete();
+    } catch (e) {
+      throw Exception('Erro ao deletar conta: $e');
+    }
+  }
+
   UserDataModel? getLoggedUser() {
     final user = _auth.currentUser;
     if (user == null) {

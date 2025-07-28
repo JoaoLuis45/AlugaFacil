@@ -171,7 +171,7 @@ class FinanceiroPage extends GetView<FinanceiroPageController> {
                                             CircularProgressIndicator(color: brownColorTwo,):
                                             IconButton(
                                               onPressed: () async{
-                                                await controller.generateReceipt(payment);
+                                                await controller.gerarESalvarRecibo(payment);
                                               },
                                               icon: Icon(
                                                 Icons.share,

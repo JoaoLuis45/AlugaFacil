@@ -55,6 +55,10 @@ dependencies:
   url_launcher: ^6.3.1
   receipt_generator: ^0.0.5
   open_file: ^3.5.10  
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  path_provider: ^2.1.2  # (ou a última versão disponível)
+
 
 flutter_native_splash:
   color: "#313131"

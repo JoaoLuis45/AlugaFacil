@@ -5,6 +5,7 @@ import 'package:aluga_facil/app/ui/pages/tabs/house_page.dart';
 import 'package:aluga_facil/app/ui/pages/tabs/inquilino_page.dart';
 import 'package:aluga_facil/app/ui/themes/app_colors.dart';
 import 'package:aluga_facil/app/ui/widgets/fade_indexed_stack.dart';
+import 'package:aluga_facil/app/utils/show_dialog_message.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -62,13 +63,30 @@ class HomePage extends GetView<HomePageController> {
             Column(
               children: [
                 ListTile(
+                    leading: Icon(Icons.delete_forever, color: Colors.red),
+                    title: Text(
+                      'Deletar Conta',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.red),
+                    ),
+                    onTap: () async {
+                      final result = await showDialogMessage(
+                        context,
+                        'Deletar Conta',
+                        'Deseja deletar essa conta?',
+                      );
+                      if (result != true) return;
+                      controller.repository.deleteUserAccount();
+                      controller.userController.logout();
+                    },
+                  ),
+                ListTile(
                   leading: Icon(Icons.exit_to_app),
                   title: Text(
                     'Sair',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  onTap: () {
-                    controller.repository.logout();
+                  onTap: () async{
+                    await controller.repository.logout();
                     controller.userController.logout();
                   },
                 ),

@@ -18,6 +18,10 @@ class UserRepository {
     return provider.getUserData();
   }
 
+  deleteUserAccount() {
+    provider.deleteUserAccount();
+  }
+
   logout() {
     provider.signOutUser();
   }

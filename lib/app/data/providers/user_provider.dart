@@ -18,6 +18,14 @@ class UserProvider extends FlutterFireAuth {
     return getLoggedUser();
   }
 
+   deleteUserAccount() async {
+    UserDataModel? user = getUserData();
+    if (user == null) {
+      throw Exception('Usuário não encontrado');
+    }
+    return await deleteAccount();
+  }
+
   signOutUser() {
     signOut();
   }
